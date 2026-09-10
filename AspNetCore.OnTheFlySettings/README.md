@@ -200,6 +200,10 @@ app.MapPutReplaceOnTheFlySettings("/my-custom-route/replace")
 							// or remove this line to allow anonymous access.
 ```
 
+### Get settings
+
 ![Sample Screenshot](Images/GetSettings.png)
+
+### Replace settings
 
 ![Sample Screenshot](Images/PutSettings.png)
