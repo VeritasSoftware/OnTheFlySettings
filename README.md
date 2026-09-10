@@ -74,9 +74,7 @@ or you can just set the values of the `settings` directly in the `AddOnTheFlySet
 
 ## Events
 
-You can subscribe to the `OnSettingsChanged` event of the IOnTheFlySettings<T> interface returned by the `AddOnTheFlySettings` method,
-
-to get notified when settings are updated:
+You can subscribe to the `OnSettingsChanged` event of the IOnTheFlySettings<T> interface returned by the `AddOnTheFlySettings` method, to get notified when settings are updated:
 
 ```csharp
 onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
