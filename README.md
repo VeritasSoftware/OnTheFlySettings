@@ -91,7 +91,7 @@ You can also use the `IOnTheFlySettings<T>` interface to access the current sett
 var basicSettings = _serviceProvider.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>().Current;
 ```
 
-## Endpoints - update settings on-the-fly
+## Endpoints - read/update settings on-the-fly
 
 Library provides Minimal API endpoints for managing settings, including reading, and updating settings.
 
