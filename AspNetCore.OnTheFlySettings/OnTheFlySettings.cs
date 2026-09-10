@@ -6,6 +6,7 @@ namespace AspNetCore.OnTheFlySettings
         where TSettings : class, new()
     {
         private TSettings _current;
+        private TSettings? _old;
         private readonly object _lock = new();
         public event Func<TSettings, TSettings, Task>? OnSettingsChanged;
 
@@ -17,6 +18,11 @@ namespace AspNetCore.OnTheFlySettings
         public TSettings Current
         {
             get { lock (_lock) return _current; }
+        }
+
+        public TSettings? Old
+        {
+            get { lock (_lock) return _old; }
         }
 
         public object CurrentObject
@@ -43,6 +49,7 @@ namespace AspNetCore.OnTheFlySettings
             lock (_lock)
             {
                 var oldSettings = _current;
+                _old = oldSettings;
                 _current = newSettings;
                 OnSettingsChanged?.Invoke(oldSettings, newSettings);
             }

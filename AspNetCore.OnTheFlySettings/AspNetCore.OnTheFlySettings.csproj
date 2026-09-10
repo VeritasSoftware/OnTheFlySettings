@@ -24,8 +24,10 @@
 
 	<ItemGroup>
 		<!-- Include README -->
-		<None Include="README.md" Pack="true" PackagePath="" />
-
+		<None Include=".\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<!-- Include images folder -->
 		<None Include="Images\**" Pack="true" PackagePath="images\" />
 	</ItemGroup>
