@@ -10,15 +10,15 @@
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <Authors>Shantanu</Authors>
 	  <Company>Veritas Software</Company>
-	  <Description>LiveHealthChecks - Client package for Real-Time Api Health Check Monitoring. Supports .NET 6/7/8/9/10.</Description>
+	  <Description>Library allows to read/update your settings on-the-fly, without re-starting your application. Supports .NET 6/7/8/9/10.</Description>
 	  <PackageProjectUrl>https://github.com/VeritasSoftware/LiveHealthChecks</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <RepositoryUrl>https://github.com/VeritasSoftware/LiveHealthChecks</RepositoryUrl>
-	  <PackageReleaseNotes>added feature to replace basic settings at runtime, without restarting the application.</PackageReleaseNotes>
-	  <PackageTags>asp net core web api health check live real time signalr web sockets push notification client</PackageTags>
-	  <Version>1.0.3</Version>
-	  <AssemblyVersion>1.0.0.3</AssemblyVersion>
-	  <FileVersion>1.0.0.3</FileVersion>
+	  <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+	  <PackageTags>asp net core on the fly settings dynamic without restarting application at runtime</PackageTags>
+	  <Version>1.0.0</Version>
+	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	  <FileVersion>1.0.0.0</FileVersion>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
