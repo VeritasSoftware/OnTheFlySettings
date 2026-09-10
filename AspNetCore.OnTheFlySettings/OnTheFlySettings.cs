@@ -5,19 +5,18 @@ namespace AspNetCore.OnTheFlySettings
     public class OnTheFlySettings<TSettings> : IOnTheFlySettings<TSettings>, IOnTheFlySettings 
         where TSettings : class, new()
     {
-        private TSettings _current;
+        private TSettings? _current;
         private TSettings? _old;
         private readonly object _lock = new();
-        private readonly ILogger<OnTheFlySettings<TSettings>>? _logger;
-        public event Func<TSettings, TSettings, Task>? OnSettingsChanged;
+        public event Func<TSettings?, TSettings, Task>? OnSettingsChanged;
+        public ILogger? Logger { get; set; }
 
-        public OnTheFlySettings(TSettings initial, ILogger<OnTheFlySettings<TSettings>>? logger = null)
+        public OnTheFlySettings(TSettings settings)
         {
-            _current = initial;
-            _logger = logger;
+            _current = settings;
         }
 
-        public TSettings Current
+        public TSettings? Current
         {
             get { lock (_lock) return _current; }
         }
@@ -27,14 +26,14 @@ namespace AspNetCore.OnTheFlySettings
             get { lock (_lock) return _old; }
         }
 
-        public object CurrentObject
+        public object? CurrentObject
         {
             get { lock (_lock) return _current; }
         }
 
         public void Replace(object newSettings)
         {
-            _logger?.LogInformation("Replacing settings with new settings.");
+            Logger?.LogInformation("Replacing settings with new settings.");
 
             if (newSettings is JsonElement jsonElement)
             {
@@ -51,14 +50,22 @@ namespace AspNetCore.OnTheFlySettings
         public void Replace(TSettings newSettings)
         {
             lock (_lock)
-            {                
-                var oldSettings = _current;
-                _logger?.LogInformation("Replacing settings with new settings. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettings, newSettings);
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                var oldSettingsStr = JsonSerializer.Serialize(_current, options);
+                var newSettingsStr = JsonSerializer.Serialize(newSettings, options);
+
+                var oldSettings = _current;               
+                Logger?.LogInformation("Replacing settings with new settings. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
                 _old = oldSettings;
                 _current = newSettings;
-                _logger?.LogInformation("Settings replaced successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettings, newSettings);
+                Logger?.LogInformation("Settings replaced successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
                 OnSettingsChanged?.Invoke(oldSettings, newSettings);
-                _logger?.LogInformation("OnSettingsChanged event invoked successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettings, newSettings);
+                Logger?.LogInformation("OnSettingsChanged event invoked successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
             }
         }
     }

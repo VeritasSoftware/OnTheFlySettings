@@ -1,22 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace AspNetCore.OnTheFlySettings
+﻿namespace AspNetCore.OnTheFlySettings
 {
     public static class Extensions
     {
-        public static IOnTheFlySettings<TSettings> AddOnTheFlySettings<TSettings>(this IServiceCollection services, Action<TSettings> configure)
+        public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, Action<TSettings> configure)
             where TSettings : class, new()
         {
             var settings = new TSettings();
 
             configure(settings);
 
+            services.AddSingleton(settings);
+
             var onTheFlySettings = new OnTheFlySettings<TSettings>(settings);
 
-            services.AddSingleton<IOnTheFlySettings>(onTheFlySettings);
-            services.AddSingleton<IOnTheFlySettings<TSettings>>(onTheFlySettings);
+            services.AddSingleton<IOnTheFlySettings>(sp => {
+                var factory = sp.GetService<ILoggerFactory>();
+                onTheFlySettings.Logger = factory?.CreateLogger(nameof(OnTheFlySettings<TSettings>));
+                return onTheFlySettings;
+            });
+            services.AddSingleton<IOnTheFlySettings<TSettings>>(sp => {
+                var factory = sp.GetService<ILoggerFactory>();
+                onTheFlySettings.Logger = factory?.CreateLogger(nameof(OnTheFlySettings<TSettings>));
+                return onTheFlySettings;
+            });
 
-            return onTheFlySettings;
+            return services;
         }
 
         public static RouteHandlerBuilder MapGetOnTheFlySettings(this WebApplication app)

@@ -58,7 +58,7 @@ using AspNetCore.OnTheFlySettings;
 ```
 
 ```csharp
-var onTheFlySettingsHolder = services.AddOnTheFlySettings<MyHealthCheckBasicSettings>(settings =>
+services.AddOnTheFlySettings<MyHealthCheckBasicSettings>(settings =>
 {
     settings.HealthCheckIntervalInMinutes = mySettings.HealthCheckIntervalInMinutes;
     settings.HealthCheckIntervalCronExpression = mySettings.HealthCheckIntervalCronExpression;
@@ -74,16 +74,7 @@ or you can just set the values of the `settings` directly in the `AddOnTheFlySet
 
 ## Events
 
-You can subscribe to the `OnSettingsChanged` event of the IOnTheFlySettings<T> interface returned by the `AddOnTheFlySettings` method, to get notified when settings are updated:
-
-```csharp
-onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
-{
-    // Handle the settings change event here
-};
-```
-
-or you can also subscribe to the event in your own class, for example in a service class.
+You can also subscribe to the event in your own class, for example in a service class.
 
 Just inject the `IOnTheFlySettings<T>` interface into your class and subscribe to the event:
 
@@ -105,13 +96,73 @@ private async Task SettingsHolder_OnSettingsChanged(MyHealthCheckBasicSettings o
 }
 ```
 
+or
+
+you can also subscribe to the event in your `Startup.cs` or `Program.cs` file:
+
+```csharp
+var onTheFlySettingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
+
+onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
+{
+    // Handle the settings change event here
+};
+```
+
 ## Accessing Current Settings
+
+### Using dependency injection
 
 You can also use the `IOnTheFlySettings<T>` interface to access the current settings at any time:
 
 ```csharp
 var basicSettings = _serviceProvider.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>().Current;
 ```
+
+or
+
+via constructor injection in your class:
+
+```csharp
+private readonly MyHealthCheckBasicSettings _settings;
+
+// Constructor
+public MyService(
+                    IOnTheFlySettings<MyHealthCheckBasicSettings> settingsHolder
+                )
+{            
+    _settings = settingsHolder.Current;
+}
+```
+
+### Using global variable
+
+Create a static Globals class in your application.
+
+```csharp
+public static class Globals
+{
+    public static MyHealthCheckBasicSettings? BasicSettings { get; set; }
+}
+```
+
+Then, subscribe to `OnSettingsChanged` event in your `Program.cs` or `Startup.cs`.
+
+Update the Globals property in the event handler.
+
+```csharp
+var onTheFlySettingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
+
+onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
+{
+    lock(_lockObj)
+    {
+        Globals.BasicSettings = newSettings;
+    }
+};
+```
+
+Use `Globals.BasicSettings` in you code.
 
 ## Endpoints - read/update settings on-the-fly
 
