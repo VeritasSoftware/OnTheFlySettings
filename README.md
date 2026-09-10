@@ -74,13 +74,37 @@ or you can just set the values of the `settings` directly in the `AddOnTheFlySet
 
 ## Events
 
-You can listen to the `OnSettingsChanged` event to get notified when settings are updated:
+You can subscribe to the `OnSettingsChanged` event of the IOnTheFlySettings<T> interface returned by the `AddOnTheFlySettings` method,
+
+to get notified when settings are updated:
 
 ```csharp
 onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 {
     // Handle the settings change event here
 };
+```
+
+or you can also subscribe to the event in your own class, for example in a service class.
+
+Just inject the `IOnTheFlySettings<T>` interface into your class and subscribe to the event:
+
+```csharp
+private readonly IOnTheFlySettings<MyHealthCheckBasicSettings> _settingsHolder;
+
+// Constructor
+public MyService(
+                    IOnTheFlySettings<MyHealthCheckBasicSettings> settingsHolder
+                )
+{            
+    _settingsHolder = settingsHolder;
+    _settingsHolder.OnSettingsChanged += SettingsHolder_OnSettingsChanged;
+}
+
+private async Task SettingsHolder_OnSettingsChanged(MyHealthCheckBasicSettings oldSettings, MyHealthCheckBasicSettings newSettings)
+{
+    // Handle the settings change event here
+}
 ```
 
 ## Accessing Current Settings
