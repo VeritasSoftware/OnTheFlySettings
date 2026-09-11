@@ -4,7 +4,7 @@
 
 This project is a AspNetCore library that provides a way to `update API/App settings on-the-fly`.
 
-You can use this library to manage your application settings dynamically `without the need to restart your API/App`. 
+You can use this library to manage your API/App settings dynamically `without the need to restart your API/App`. 
 
 It supports `various settings sources` and allows you to `update settings at runtime`.
 
