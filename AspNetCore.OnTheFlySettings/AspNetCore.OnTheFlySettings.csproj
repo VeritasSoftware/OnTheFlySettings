@@ -10,12 +10,12 @@
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <Authors>Shantanu</Authors>
 	  <Company>Veritas Software</Company>
-	  <Description>Library allows to read/update your settings on-the-fly, without re-starting your application. Supports .NET 6/7/8/9/10.</Description>
+	  <Description>Lightweight library allows you to read/update your API/App settings on-the-fly, at runtime, without needing a restart. Supports .NET 6/7/8/9/10.</Description>
 	  <PackageProjectUrl>https://github.com/VeritasSoftware/OnTheFlySettings</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <RepositoryUrl>https://github.com/VeritasSoftware/OnTheFlySettings</RepositoryUrl>
 	  <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
-	  <PackageTags>asp net core on the fly settings dynamic without restarting application at runtime</PackageTags>
+	  <PackageTags>asp net core on the fly settings dynamic without restarting API application runtime</PackageTags>
 	  <Version>1.0.0</Version>
 	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
 	  <FileVersion>1.0.0.0</FileVersion>

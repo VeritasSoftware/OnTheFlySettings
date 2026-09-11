@@ -164,7 +164,7 @@ onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 };
 ```
 
-Use `Globals.BasicSettings` in you code.
+Use `Globals.BasicSettings` in your code.
 
 ## Endpoints - read/update settings on-the-fly
 
