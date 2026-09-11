@@ -1,5 +1,7 @@
 # AspNetCore.OnTheFlySettings
 
+[![.NET Build & Test](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml/badge.svg)](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml)
+
 This project is a AspNetCore library that provides a way to `update settings on-the-fly`.
 
 You can use this library to manage your application settings dynamically `without the need to restart your application`. 
