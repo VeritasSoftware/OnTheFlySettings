@@ -2,5 +2,10 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
-  <Project Path="AspNetCore.OnTheFlySettings/AspNetCore.OnTheFlySettings.csproj" />
+  <Folder Name="/src/">
+    <Project Path="AspNetCore.OnTheFlySettings/AspNetCore.OnTheFlySettings.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="AspNetCore.OnTheFlySettings.Tests/AspNetCore.OnTheFlySettings.Tests.csproj" Id="c9663ae2-2fa4-48a3-a533-e4adb17092a3" />
+  </Folder>
 </Solution>

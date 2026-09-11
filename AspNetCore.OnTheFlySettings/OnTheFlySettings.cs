@@ -47,7 +47,7 @@ namespace AspNetCore.OnTheFlySettings
             }
         }
 
-        public void Replace(TSettings newSettings)
+        private void Replace(TSettings newSettings)
         {
             lock (_lock)
             {

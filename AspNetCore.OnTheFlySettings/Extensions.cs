@@ -27,37 +27,18 @@
             return services;
         }
 
-        public static RouteHandlerBuilder MapGetOnTheFlySettings(this WebApplication app)
+        public static RouteHandlerBuilder MapGetOnTheFlySettings(this WebApplication app, string? route = null)
         {
-            var routeHandler = app.MapGet("/settings", (IOnTheFlySettings settingsHolder) => { 
+            var routeHandler = app.MapGet(route ?? "/settings", (IOnTheFlySettings settingsHolder) => {
                 return settingsHolder.CurrentObject;
             });
 
             return routeHandler;
         }
 
-        public static RouteHandlerBuilder MapGetOnTheFlySettings(this WebApplication app, string route)
+        public static RouteHandlerBuilder MapPutReplaceOnTheFlySettings(this WebApplication app, string? route = null)
         {
-            var routeHandler = app.MapGet(route, (IOnTheFlySettings settingsHolder) => {
-                return settingsHolder.CurrentObject;
-            });
-
-            return routeHandler;
-        }
-
-        public static RouteHandlerBuilder MapPutReplaceOnTheFlySettings(this WebApplication app)
-        {
-            var routeHandler = app.MapPut("/settings/replace", (object newSettings, IOnTheFlySettings settingsHolder) => {                
-                settingsHolder.Replace(newSettings);
-                return Results.Ok("Settings replaced");
-            });
-
-            return routeHandler;
-        }
-
-        public static RouteHandlerBuilder MapPutReplaceOnTheFlySettings(this WebApplication app, string route)
-        {
-            var routeHandler = app.MapPut(route, (object newSettings, IOnTheFlySettings settingsHolder) => {
+            var routeHandler = app.MapPut(route ?? "/settings/replace", (object newSettings, IOnTheFlySettings settingsHolder) => {
                 settingsHolder.Replace(newSettings);
                 return Results.Ok("Settings replaced");
             });

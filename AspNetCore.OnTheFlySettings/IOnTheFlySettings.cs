@@ -1,6 +1,6 @@
 ﻿namespace AspNetCore.OnTheFlySettings
 {
-    public interface IOnTheFlySettings
+    internal interface IOnTheFlySettings
     {
         ILogger? Logger { get; set; }
         object? CurrentObject { get; }
@@ -13,6 +13,5 @@
         ILogger? Logger { get; set; }
         TSettings? Current { get; }
         event Func<TSettings?, TSettings, Task>? OnSettingsChanged;
-        void Replace(TSettings newSettings);
     }
 }
