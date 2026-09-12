@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace AspNetCore.OnTheFlySettings
+namespace OnTheFlySettings
 {
     public class OnTheFlySettings<TSettings> : IOnTheFlySettings<TSettings>, IOnTheFlySettings 
         where TSettings : class, new()

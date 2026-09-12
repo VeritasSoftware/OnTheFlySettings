@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCore.OnTheFlySettings\AspNetCore.OnTheFlySettings.csproj" />
+    <ProjectReference Include="..\OnTheFlySettings\OnTheFlySettings.csproj" />
   </ItemGroup>
 
   <ItemGroup>

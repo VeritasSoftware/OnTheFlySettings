@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.OnTheFlySettings.Tests
+﻿namespace OnTheFlySettings.Tests
 {
     public class MyHealthCheckBasicSettings
     {

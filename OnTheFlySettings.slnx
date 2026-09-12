@@ -3,9 +3,9 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="AspNetCore.OnTheFlySettings/AspNetCore.OnTheFlySettings.csproj" />
+    <Project Path="OnTheFlySettings/OnTheFlySettings.csproj" Id="daabf8ef-4061-473d-b32f-50a3cf9914e5" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="AspNetCore.OnTheFlySettings.Tests/AspNetCore.OnTheFlySettings.Tests.csproj" Id="c9663ae2-2fa4-48a3-a533-e4adb17092a3" />
+    <Project Path="OnTheFlySettings.Tests/OnTheFlySettings.Tests.csproj" Id="9dccd3a3-8308-4d0c-93ef-7517bf2e490e" />
   </Folder>
 </Solution>

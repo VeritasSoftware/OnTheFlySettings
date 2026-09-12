@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace AspNetCore.OnTheFlySettings.Tests
+namespace OnTheFlySettings.Tests
 {
     public class OnTheFlySettingsTests
     {

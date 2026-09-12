@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "AspNetCore.OnTheFlySettings": {
+    "OnTheFlySettings": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:58070;http://localhost:58071"
+      "applicationUrl": "https://localhost:50980;http://localhost:50981"
     }
   }
 }

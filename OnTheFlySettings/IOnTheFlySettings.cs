@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.OnTheFlySettings
+﻿namespace OnTheFlySettings
 {
     public interface IOnTheFlySettingsBase
     {
