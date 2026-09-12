@@ -2,11 +2,13 @@
 
 [![.NET Build & Test](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml/badge.svg)](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml)
 
+### Supports .NET 6/7/8/9/10.
+
 This project is a AspNetCore library that provides a way to `update API/App settings on-the-fly`.
 
-You can use this library to manage your API/App settings dynamically `without the need to restart your API/App`. 
+### Zero downtime! At runtime! No need to restart your API/App!
 
-It supports `various settings sources` and allows you to `update settings at runtime`.
+It supports `various settings sources`.
 
 You add the library to your project by adding the NuGet package:
 
@@ -18,11 +20,33 @@ or
 Install-Package AspNetCore.OnTheFlySettings
 ```
 
-## Usage
+## Plugging in the framework
 
-Let's say you have a settings class called `MyHealthCheckBasicSettings` in your application,
+### Create settings section
 
-where you put all the settings that you want to update on-the-fly:
+Create a section in your appsettings.json for the settings that you want to update on-the-fly:
+
+```json
+{
+  "MyHealthCheckBasicSettings": {
+    "HealthCheckIntervalInMinutes": 15,
+    "HealthCheckIntervalCronExpression": "* * * * *",
+    "HealthCheckServerHubUrl": "https://localhost:5001/livehealthcheckshub",
+    "PublishOnlyWhenNotHealthy": false,
+    "AddHealthCheckMiddleware": false
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+```
+
+### Create settings class
+
+Create a settings class called `MyHealthCheckBasicSettings` in your application:
 
 ```csharp
 public class MyHealthCheckBasicSettings
@@ -35,48 +59,46 @@ public class MyHealthCheckBasicSettings
 }
 ```
 
-### Optional: Adding more settings
+### Configuring the library
 
-You can derive another settings class from `MyHealthCheckBasicSettings` to add more settings, that need not be updated on-the-fly, 
+Then you can configure the library in your `Startup.cs` or `Program.cs` file.
 
-but you want to keep them in the same settings class.
-
-```csharp
-public class MyHealthCheckSettings : MyHealthCheckBasicSettings
-{
-    public string ClientId { get; set; } = string.Empty;
-    public string ReceiveMethod { get; set; } = string.Empty;
-    public string SecretKey { get; set; } = string.Empty;
-    public Func<HealthReport, object>? TransformHealthReport { get; set; } = null;        
-}
-```
-
-## Configuring the library
-
-Then you can configure the library in your `Startup.cs` or `Program.cs` file:
+Bind the section to the settings class & add to OnTheFlySettings framework:
 
 ```csharp
 using AspNetCore.OnTheFlySettings;
 ```
 
 ```csharp
-services.AddOnTheFlySettings<MyHealthCheckBasicSettings>(settings =>
-{
-    settings.HealthCheckIntervalInMinutes = mySettings.HealthCheckIntervalInMinutes;
-    settings.HealthCheckIntervalCronExpression = mySettings.HealthCheckIntervalCronExpression;
-    settings.HealthCheckServerHubUrl = mySettings.HealthCheckServerHubUrl;
-    settings.PublishOnlyWhenNotHealthy = mySettings.PublishOnlyWhenNotHealthy;
-    settings.AddHealthCheckMiddleware = mySettings.AddHealthCheckMiddleware;
-});
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration
+       .SetBasePath(Directory.GetCurrentDirectory())
+       .AddJsonFile("appsettings.json", false, true);
+
+var appBasicSettings = builder.Configuration.GetSection("MyHealthCheckBasicSettings")
+                                            .Get<MyHealthCheckBasicSettings>();
+
+if (appBasicSettings == null)
+    throw new ApplicationException("Settings not found.");
+
+// Add the settings to the OnTheFlySettings framework
+builder.Services.AddOnTheFlySettings(appBasicSettings);
 ```
 
-`mySettings` is an instance of `MyHealthCheckSettings` that you have optionally created.
+Thats it!
 
-or you can just set the values of the `settings` directly in the `AddOnTheFlySettings` method.
+## Usage in your API/App
 
-## Events
+The library provides a `IOnTheFlySettings<T>` interface that you use in your API/App.
 
-You can also subscribe to the event in your own class, for example in a service class.
+![IOnTheFlySettings](Images/IOnTheFlySettings.png)
+
+### Events
+
+The interface has an event `OnSettingsChanged`.
+
+You can subscribe to the event in your own class, for example in a service class.
 
 Just inject the `IOnTheFlySettings<T>` interface into your class and subscribe to the event:
 
@@ -103,19 +125,21 @@ or
 you can also subscribe to the event in your `Startup.cs` or `Program.cs` file:
 
 ```csharp
-var onTheFlySettingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
+var settingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
 
-onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
+settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 {
     // Handle the settings change event here
 };
 ```
 
-## Accessing Current Settings
+### Accessing Current Settings
 
-### Using dependency injection
+The interface has `Current` & `Old` properties to access the current & previous settings.
 
-You can also use the `IOnTheFlySettings<T>` interface to access the current settings at any time:
+#### Using dependency injection
+
+You can also use the interface to access the current settings at any time:
 
 ```csharp
 var basicSettings = _serviceProvider.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>().Current;
@@ -126,18 +150,18 @@ or
 via constructor injection in your class:
 
 ```csharp
-private readonly MyHealthCheckBasicSettings _settings;
+private readonly MyHealthCheckBasicSettings _basicSettings;
 
 // Constructor
 public MyService(
                     IOnTheFlySettings<MyHealthCheckBasicSettings> settingsHolder
                 )
 {            
-    _settings = settingsHolder.Current;
+    _basicSettings = settingsHolder.Current;
 }
 ```
 
-### Using global variable
+#### Using global variable
 
 Create a static Globals class in your application.
 
@@ -153,9 +177,9 @@ Then, subscribe to `OnSettingsChanged` event in your `Program.cs` or `Startup.cs
 Update the Globals property in the event handler.
 
 ```csharp
-var onTheFlySettingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
+var settingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
 
-onTheFlySettingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
+settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 {
     lock(_lockObj)
     {

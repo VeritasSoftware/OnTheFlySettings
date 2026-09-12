@@ -2,6 +2,12 @@
 {
     public static class Extensions
     {
+        public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, TSettings settings)
+            where TSettings : class, new()
+        {
+            return services.AddOnTheFlySettingsInternal(settings);
+        }
+
         public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, Action<TSettings> configure)
             where TSettings : class, new()
         {
@@ -9,6 +15,12 @@
 
             configure(settings);
 
+            return services.AddOnTheFlySettingsInternal(settings);
+        }
+
+        private static IServiceCollection AddOnTheFlySettingsInternal<TSettings>(this IServiceCollection services, TSettings settings)
+            where TSettings : class, new()
+        {
             services.AddSingleton(settings);
 
             var onTheFlySettings = new OnTheFlySettings<TSettings>(settings);

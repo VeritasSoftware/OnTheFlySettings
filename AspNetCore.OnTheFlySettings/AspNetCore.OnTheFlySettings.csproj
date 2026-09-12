@@ -10,7 +10,7 @@
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <Authors>Shantanu</Authors>
 	  <Company>Veritas Software</Company>
-	  <Description>Lightweight library allows you to read/update your API/App settings on-the-fly, at runtime, without needing a restart. Supports .NET 6/7/8/9/10.</Description>
+	  <Description>Update your API/App config settings on-the-fly, at runtime, without needing a restart! Zero downtime! Supports .NET 6/7/8/9/10.</Description>
 	  <PackageProjectUrl>https://github.com/VeritasSoftware/OnTheFlySettings</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <RepositoryUrl>https://github.com/VeritasSoftware/OnTheFlySettings</RepositoryUrl>
