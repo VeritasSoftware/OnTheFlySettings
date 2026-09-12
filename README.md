@@ -13,11 +13,11 @@ It supports `various settings sources`.
 You add the library to your project by adding the NuGet package:
 
 ```bash
-dotnet add package AspNetCore.OnTheFlySettings
+dotnet add package OnTheFlySettings
 ```
 or
 ```bash
-Install-Package AspNetCore.OnTheFlySettings
+Install-Package OnTheFlySettings
 ```
 
 ## Plugging in the framework
@@ -66,7 +66,7 @@ Then you can configure the library in your `Startup.cs` or `Program.cs` file.
 Bind the section to the settings class & add to OnTheFlySettings framework:
 
 ```csharp
-using AspNetCore.OnTheFlySettings;
+using OnTheFlySettings;
 ```
 
 ```csharp
