@@ -2,7 +2,7 @@
 {
     public interface IOnTheFlySettingsBase
     {
-        ILogger? Logger { get; set; }
+        internal ILogger? Logger { get; set; }
     }
 
     internal interface IOnTheFlySettings : IOnTheFlySettingsBase
