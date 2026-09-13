@@ -86,6 +86,20 @@ if (appBasicSettings == null)
 builder.Services.AddOnTheFlySettings(appBasicSettings);
 ```
 
+Library provides Minimal API endpoints for reading and updating settings. Read [more](#endpoints-readupdate-settings-on-the-fly).
+
+Add the endpoints to your application:
+
+```csharp
+app.MapGetOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+							// or remove this line to allow anonymous access.
+
+app.MapPutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+							// or remove this line to allow anonymous access.
+```
+
 Thats it!
 
 ## Usage in your API/App
