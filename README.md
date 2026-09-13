@@ -250,6 +250,8 @@ app.MapPutReplaceOnTheFlySettings("/my-custom-route/replace")
 
 ## .NET Client for endpoints
 
-I have provided a .NET Client library for interacting with the endpoints.
+A .NET Client library is provided for interacting with the endpoints.
+
+Read [more](/OnTheFlySettings.Client).
 
 [Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsClientTests.cs)
