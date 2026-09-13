@@ -22,6 +22,7 @@ namespace OnTheFlySettings.Tests
         }
 
         [Fact(Skip = "Skipped in CI pipeline")]
+        //[Fact]
         public async Task GetSettingsAsync()
         {
             var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
@@ -37,11 +38,12 @@ namespace OnTheFlySettings.Tests
         }
 
         [Fact(Skip = "Skipped in CI pipeline")]
+        //[Fact]
         public async Task ReplaceSettingsAsync()
         {
             var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
 
-            var testSettings = new MyHealthCheckBasicSettings
+            var newSettings = new MyHealthCheckBasicSettings
             {
                 HealthCheckIntervalInMinutes = 30,
                 HealthCheckIntervalCronExpression = "*/5 * * * *",
@@ -50,18 +52,18 @@ namespace OnTheFlySettings.Tests
                 AddHealthCheckMiddleware = true
             };
 
-            var response = await client.ReplaceSettingsAsync(testSettings);
+            var response = await client.ReplaceSettingsAsync(newSettings);
 
             Assert.True(response);
 
             var responseGet = await client.GetSettingsAsync<MyHealthCheckBasicSettings>();
 
             Assert.NotNull(responseGet);
-            Assert.Equal(testSettings.HealthCheckIntervalInMinutes, responseGet.HealthCheckIntervalInMinutes);
-            Assert.Equal(testSettings.HealthCheckIntervalCronExpression, responseGet.HealthCheckIntervalCronExpression);
-            Assert.Equal(testSettings.HealthCheckServerHubUrl, responseGet.HealthCheckServerHubUrl);
-            Assert.Equal(testSettings.PublishOnlyWhenNotHealthy, responseGet.PublishOnlyWhenNotHealthy);
-            Assert.Equal(testSettings.AddHealthCheckMiddleware, responseGet.AddHealthCheckMiddleware);
+            Assert.Equal(newSettings.HealthCheckIntervalInMinutes, responseGet.HealthCheckIntervalInMinutes);
+            Assert.Equal(newSettings.HealthCheckIntervalCronExpression, responseGet.HealthCheckIntervalCronExpression);
+            Assert.Equal(newSettings.HealthCheckServerHubUrl, responseGet.HealthCheckServerHubUrl);
+            Assert.Equal(newSettings.PublishOnlyWhenNotHealthy, responseGet.PublishOnlyWhenNotHealthy);
+            Assert.Equal(newSettings.AddHealthCheckMiddleware, responseGet.AddHealthCheckMiddleware);
         }
     }
 }

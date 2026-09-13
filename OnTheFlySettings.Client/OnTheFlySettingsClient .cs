@@ -19,20 +19,13 @@ namespace OnTheFlySettings.Client
             _clientSettings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public async Task<T> GetSettingsAsync<T>(string route = "/settings")
+        public async Task<T> GetSettingsAsync<T>(string route = "/settings",
+                                                 Action<HttpRequestHeaders> addHeaders = null)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get,  route);
+            var request = new HttpRequestMessage(HttpMethod.Get,  route);
 
-            // Add Authorization header if provided
-            var authSettings = _clientSettings.AuthSettings;
-
-            if (authSettings != null)
-            {
-                if (!string.IsNullOrWhiteSpace(authSettings.AuthScheme) && !string.IsNullOrWhiteSpace(authSettings.AuthToken))
-                {
-                    request.Headers.Authorization = new AuthenticationHeaderValue(authSettings.AuthScheme, authSettings.AuthToken);
-                }
-            }
+            // Add Authorization or other headers if needed
+            addHeaders?.Invoke(request.Headers);
 
             HttpResponseMessage response;
 
@@ -69,7 +62,7 @@ namespace OnTheFlySettings.Client
         /// </summary>
         public async Task<bool> ReplaceSettingsAsync<T>(T payload,
                                                         string route = "/settings/replace",
-                                                        AuthSettings authSettings = null)
+                                                        Action<HttpRequestHeaders> addHeaders = null)
             where T : class
         {
             if (payload == null)
@@ -80,24 +73,16 @@ namespace OnTheFlySettings.Client
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Create request
-            using var request = new HttpRequestMessage(HttpMethod.Put, route)
+            var request = new HttpRequestMessage(HttpMethod.Put, route)
             {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
 
-            // Add Authorization header if provided
-            var myAuthSettings = authSettings ?? _clientSettings.AuthSettings;
-
-            if (myAuthSettings != null)
-            {
-                if (!string.IsNullOrWhiteSpace(myAuthSettings.AuthScheme) && !string.IsNullOrWhiteSpace(myAuthSettings.AuthToken))
-                {
-                    request.Headers.Authorization = new AuthenticationHeaderValue(myAuthSettings.AuthScheme, myAuthSettings.AuthToken);
-                }
-            }
+            // Add Authorization or other headers if needed
+            addHeaders?.Invoke(request.Headers);
 
             HttpResponseMessage response;
 

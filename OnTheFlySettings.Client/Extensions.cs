@@ -23,17 +23,7 @@ namespace OnTheFlySettings.Client
             services.AddHttpClient<IHttpService, HttpService>(client =>
             {
                 client.BaseAddress = new Uri(settings.BaseUrl);
-                client.Timeout = TimeSpan.FromMilliseconds(settings.TimeoutMilliseconds);
-
-                if (settings.AuthSettings != null
-                        & !string.IsNullOrEmpty(settings.AuthSettings.AuthScheme)
-                        & !string.IsNullOrEmpty(settings.AuthSettings.AuthToken))
-                {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                                                                                                settings.AuthSettings.AuthScheme, 
-                                                                                                settings.AuthSettings.AuthToken
-                                                                                              );
-                }                
+                client.Timeout = TimeSpan.FromMilliseconds(settings.TimeoutMilliseconds);               
             });
 
             services.AddScoped<IOnTheFlySettingsClient, OnTheFlySettingsClient>();
