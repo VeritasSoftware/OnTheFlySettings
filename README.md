@@ -247,3 +247,9 @@ app.MapPutReplaceOnTheFlySettings("/my-custom-route/replace")
 ### Replace settings
 
 ![Sample Screenshot](Images/PutSettings.png)
+
+## .NET Client for endpoints
+
+I have provided a .NET Client library for interacting with the endpoints.
+
+[Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsClientTests.cs)

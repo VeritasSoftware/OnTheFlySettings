@@ -3,6 +3,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="OnTheFlySettings.Client/OnTheFlySettings.Client.csproj" Id="b87b7864-49ba-4b7d-8565-8a90c1497ede" />
     <Project Path="OnTheFlySettings/OnTheFlySettings.csproj" Id="daabf8ef-4061-473d-b32f-50a3cf9914e5" />
   </Folder>
   <Folder Name="/tests/">
