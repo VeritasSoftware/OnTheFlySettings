@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OnTheFlySettings.Client\OnTheFlySettings.Client.csproj" />
     <ProjectReference Include="..\OnTheFlySettings\OnTheFlySettings.csproj" />
   </ItemGroup>
 
