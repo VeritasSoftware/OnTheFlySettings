@@ -19,6 +19,7 @@ namespace OnTheFlySettings.Tests
             services.AddOnTheFlySettingsClient(settings =>
             {
                 settings.BaseUrl = "https://localhost:7277";
+                settings.TimeoutMilliseconds = 1000;
             });
 
             _serviceProvider = services.BuildServiceProvider();

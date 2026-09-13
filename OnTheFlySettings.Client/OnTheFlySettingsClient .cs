@@ -68,7 +68,8 @@ namespace OnTheFlySettings.Client
         /// Sends a PUT request to /settings/replace with a generic payload.
         /// </summary>
         public async Task<bool> ReplaceSettingsAsync<T>(T payload,
-                                                        string route = "/settings/replace")
+                                                        string route = "/settings/replace",
+                                                        AuthSettings authSettings = null)
             where T : class
         {
             if (payload == null)
@@ -88,13 +89,13 @@ namespace OnTheFlySettings.Client
             };
 
             // Add Authorization header if provided
-            var authSettings = _clientSettings.AuthSettings;
+            var myAuthSettings = authSettings ?? _clientSettings.AuthSettings;
 
-            if (authSettings != null)
+            if (myAuthSettings != null)
             {
-                if (!string.IsNullOrWhiteSpace(authSettings.AuthScheme) && !string.IsNullOrWhiteSpace(authSettings.AuthToken))
+                if (!string.IsNullOrWhiteSpace(myAuthSettings.AuthScheme) && !string.IsNullOrWhiteSpace(myAuthSettings.AuthToken))
                 {
-                    request.Headers.Authorization = new AuthenticationHeaderValue(authSettings.AuthScheme, authSettings.AuthToken);
+                    request.Headers.Authorization = new AuthenticationHeaderValue(myAuthSettings.AuthScheme, myAuthSettings.AuthToken);
                 }
             }
 
@@ -119,11 +120,6 @@ namespace OnTheFlySettings.Client
 
             if (responseStr == null)
                 throw new ApplicationException("Settings not replaced.");
-
-            //if (responseStr is JsonElement jsonElement)
-            //{
-
-            //}
 
             if (string.Compare(responseStr, "\"Settings replaced\"", true) == 0)
             {
