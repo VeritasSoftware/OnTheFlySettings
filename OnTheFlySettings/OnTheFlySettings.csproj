@@ -29,6 +29,5 @@
 			<PackagePath>\</PackagePath>
 		</None>
 		<!-- Include images folder -->
-		<None Include="Images\**" Pack="true" PackagePath="images\" />
 	</ItemGroup>
 </Project>

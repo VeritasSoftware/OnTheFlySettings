@@ -2,6 +2,11 @@
 
 [![.NET Build & Test](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml/badge.svg)](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml)
 
+|Packages|Version & Downloads|
+|---------------------------|:---:|
+|*OnTheFlySettings*|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings)](https://www.nuget.org/packages/OnTheFlySettings)|
+|*OnTheFlySettings.Client*|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.Client)](https://www.nuget.org/packages/OnTheFlySettings.Client)|
+
 ### Supports .NET 6/7/8/9/10.
 
 This project is a AspNetCore library that provides a way to `update API/App settings on-the-fly`.
