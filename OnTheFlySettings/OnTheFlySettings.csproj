@@ -14,11 +14,11 @@
 		<PackageProjectUrl>https://github.com/VeritasSoftware/OnTheFlySettings</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/VeritasSoftware/OnTheFlySettings</RepositoryUrl>
-		<PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+		<PackageReleaseNotes>Minor improvements.</PackageReleaseNotes>
 		<PackageTags>asp net core on the fly settings dynamic without restarting API application runtime</PackageTags>
-		<Version>1.0.0</Version>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
+		<Version>1.0.1</Version>
+		<AssemblyVersion>1.0.0.1</AssemblyVersion>
+		<FileVersion>1.0.0.1</FileVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
