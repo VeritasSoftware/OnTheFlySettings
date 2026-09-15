@@ -16,7 +16,7 @@ namespace OnTheFlySettings
             _current = settings;
         }
 
-        public TSettings? Current
+        public TSettings Current
         {
             get { lock (_lock) return _current; }
         }
@@ -26,7 +26,7 @@ namespace OnTheFlySettings
             get { lock (_lock) return _old; }
         }
 
-        public object? CurrentObject
+        public object CurrentObject
         {
             get { lock (_lock) return _current; }
         }
