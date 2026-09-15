@@ -133,7 +133,7 @@ public MyService(
     _settingsHolder.OnSettingsChanged += SettingsHolder_OnSettingsChanged;
 }
 
-private async Task SettingsHolder_OnSettingsChanged(MyHealthCheckBasicSettings oldSettings, MyHealthCheckBasicSettings newSettings)
+private async Task SettingsHolder_OnSettingsChanged(MyHealthCheckBasicSettings? oldSettings, MyHealthCheckBasicSettings newSettings)
 {
     // Handle the settings change event here
 }

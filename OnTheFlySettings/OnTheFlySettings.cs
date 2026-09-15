@@ -5,7 +5,7 @@ namespace OnTheFlySettings
     public class OnTheFlySettings<TSettings> : IOnTheFlySettings<TSettings>, IOnTheFlySettings 
         where TSettings : class, new()
     {
-        private TSettings? _current;
+        private TSettings _current;
         private TSettings? _old;
         private readonly object _lock = new();
         public event Func<TSettings?, TSettings, Task>? OnSettingsChanged;
