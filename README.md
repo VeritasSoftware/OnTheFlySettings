@@ -9,6 +9,8 @@
 
 ### Supports .NET 6/7/8/9/10.
 
+![On The Fly Settings](/Images/OnTheFlySettings.jpg)
+
 This project is a AspNetCore library that provides a way to `update API/App settings on-the-fly`.
 
 ### Zero downtime! At runtime! No need to restart your API/App!
