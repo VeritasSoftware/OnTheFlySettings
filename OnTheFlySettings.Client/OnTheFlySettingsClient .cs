@@ -10,13 +10,11 @@ namespace OnTheFlySettings.Client
     public class OnTheFlySettingsClient : IOnTheFlySettingsClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ClientSettings _clientSettings;
 
-        public OnTheFlySettingsClient(IHttpService httpService, ClientSettings settings)
+        public OnTheFlySettingsClient(IHttpService httpService)
         {
             var httpClient = httpService.Client;
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _clientSettings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
