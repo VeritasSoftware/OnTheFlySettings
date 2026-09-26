@@ -111,7 +111,7 @@ Thats it!
 
 ## Usage in your API/App
 
-The library provides a `IOnTheFlySettings<T>` interface that you use in your API/App.
+The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
 
 ![IOnTheFlySettings](Images/IOnTheFlySettings.png)
 
@@ -121,7 +121,7 @@ The interface has an event `OnSettingsChanged`.
 
 You can subscribe to the event in your own class, for example in a service class.
 
-Just inject the `IOnTheFlySettings<T>` interface into your class and subscribe to the event:
+Just inject the `IOnTheFlySettings<TSettings>` interface into your class and subscribe to the event:
 
 ```csharp
 private readonly IOnTheFlySettings<MyHealthCheckBasicSettings> _settingsHolder;

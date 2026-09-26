@@ -19,8 +19,8 @@ namespace OnTheFlySettings.Client
             _clientSettings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public async Task<T> GetSettingsAsync<T>(string route = "/settings",
-                                                 Action<HttpRequestHeaders> addHeaders = null)
+        public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
+                                                                 Action<HttpRequestHeaders> addHeaders = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,  route);
 
@@ -54,21 +54,21 @@ namespace OnTheFlySettings.Client
                 PropertyNameCaseInsensitive = true
             };
 
-            return JsonSerializer.Deserialize<T>(responseStr, options);
+            return JsonSerializer.Deserialize<TSettings>(responseStr, options);
         }
 
         /// <summary>
-        /// Sends a PUT request to /settings/replace with a generic payload.
+        /// Sends a PUT request to /settings/replace with a generic newSettings.
         /// </summary>
-        public async Task<bool> ReplaceSettingsAsync<T>(T payload,
-                                                        string route = "/settings/replace",
-                                                        Action<HttpRequestHeaders> addHeaders = null)
-            where T : class
+        public async Task<bool> ReplaceSettingsAsync<TSettings>(TSettings newSettings,
+                                                                string route = "/settings/replace",
+                                                                Action<HttpRequestHeaders> addHeaders = null)
+            where TSettings : class
         {
-            if (payload == null)
-                throw new ArgumentNullException(nameof(payload));
+            if (newSettings == null)
+                throw new ArgumentNullException(nameof(newSettings));
 
-            string json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
+            string json = JsonSerializer.Serialize(newSettings, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
