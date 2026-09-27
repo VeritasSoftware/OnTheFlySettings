@@ -1,0 +1,35 @@
+{
+  "name": "ts-react-on-the-fly-settings",
+  "version": "1.0.0",
+  "description": "update your app settings at run-time, without re-start. no downtime.",
+  "keywords": [
+    "react",
+    "typescript",
+    "on",
+    "the",
+    "fly",
+    "settings",
+    "run-time",
+    "no",
+    "restart",
+    "no",
+    "downtime."
+  ],
+  "license": "MIT",
+  "author": "Shantanu",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "devDependencies": {
+    "tslib": "^2.8.1",
+    "typescript": "^7.0.2"
+  },
+  "peerDependencies": {
+    "@types/react": "^19.3.0",
+    "next": "^15.5.25",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}
