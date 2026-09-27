@@ -9,6 +9,7 @@
     {        
         object CurrentObject { get; }
         void Replace(object newSettings);
+        void Replace(Dictionary<string, string> newSettings);
     }
 
     public interface IOnTheFlySettings<TSettings> :IOnTheFlySettingsBase
