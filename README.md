@@ -111,7 +111,9 @@ Thats it!
 
 ## Plugging in the Azure framework
 
-You may keep your `settings as secrets in the Azure Key Vault`.
+You may keep your `settings as secrets in the Azure Key Vault`. 
+
+The Key Vault name can be anything you want.
 
 ![Azure Secrets](/Images/AzureKeyVaultSecrets.png)
 
@@ -147,7 +149,7 @@ using OnTheFlySettings;
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 
-string keyVaultName = "myazurekeyvault";
+string keyVaultName = "ontheflysettings";
 var kvUri = "https://" + keyVaultName + ".vault.azure.net";
 
 var credential = new ClientSecretCredential("<<your tenantId here>>",
