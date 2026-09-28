@@ -25,13 +25,14 @@ namespace OnTheFlySettings.AzureKeyVault.Client
             _clientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
         }
 
-        public async Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(CancellationToken cancellationToken = default)
+        private async Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsInternalAsync(string keyVaultUrl, 
+                                                                                                CancellationToken cancellationToken = default)
         {
             SecretClient keyVaultClient;
 
             if (_clientSettings.Azure.UseManagedIdentity)
             {
-                keyVaultClient = new SecretClient(new Uri(_clientSettings.Azure.KeyVaultUrl), new DefaultAzureCredential());
+                keyVaultClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
             }
             else
             {
@@ -39,8 +40,8 @@ namespace OnTheFlySettings.AzureKeyVault.Client
                                                         _clientSettings.Azure.Credentials.ClientId,
                                                         _clientSettings.Azure.Credentials.ClientSecret);
 
-                keyVaultClient = new SecretClient(new Uri(_clientSettings.Azure.KeyVaultUrl), credential);
-            }            
+                keyVaultClient = new SecretClient(new Uri(keyVaultUrl), credential);
+            }
 
             AsyncPageable<SecretProperties> secretProperties = keyVaultClient.GetPropertiesOfSecretsAsync(cancellationToken);
 
@@ -48,12 +49,22 @@ namespace OnTheFlySettings.AzureKeyVault.Client
 
             await foreach (var secretProperty in secretProperties)
             {
-                var response = await keyVaultClient.GetSecretAsync(secretProperty.Name, cancellationToken: cancellationToken).ConfigureAwait(false);
+                var response = await keyVaultClient.GetSecretAsync(secretProperty.Name, cancellationToken: cancellationToken);
 
                 secrets.Add(response.Value);
             }
 
             return secrets.ToDictionary(x => x.Name, x => x.Value);
+        }
+
+        public async Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(CancellationToken cancellationToken = default)
+        {
+            return await GetAllAzureKeyVaultSecretsInternalAsync(_clientSettings.Azure.KeyVaultUrl, cancellationToken);
+        }
+
+        public async Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(string keyVaultUrl, CancellationToken cancellationToken = default)
+        {
+            return await GetAllAzureKeyVaultSecretsInternalAsync(keyVaultUrl, cancellationToken);
         }
 
         public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",

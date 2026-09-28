@@ -42,6 +42,7 @@ You can provide your headers (including Auth) if needed.
 public interface IOnTheFlySettingsClient
 {
     Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(CancellationToken cancellationToken = default);
+    Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(string keyVaultUrl, CancellationToken cancellationToken = default);
     Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
                                                 Action<HttpRequestHeaders> addHeaders = null);
     Task<bool> ReplaceSettingsAsync(IDictionary<string, string> newSettings,
@@ -51,17 +52,31 @@ public interface IOnTheFlySettingsClient
 }
 ```
 
-You can inject interface and call the `GetAllAzureSecretsAsync`, `GetSettingsAsync` & `ReplaceSettingsAsync` methods:
+You can inject interface and call the `GetAllAzureKeyVaultSecretsAsync`, `GetSettingsAsync` & `ReplaceSettingsAsync` methods:
 
-Get all Azure Key Vault secrets:
+**Get all Azure Key Vault secrets:**
+
+If you have provided the Key Vault Url in the settings, you can do this:
 
 ```csharp
 var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
 
-var azureSecrets = await client.GetAllAzureSecretsAsync();
+var azureSecrets = await client.GetAllAzureKeyVaultSecretsAsync();
 ```
 
-Get current settings from API:
+OR
+
+you can use the overload & provide the Key Vault Url:
+
+```csharp
+var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
+
+string keyVaultUrl = "<<your key vault url here>>";
+
+var azureSecrets = await client.GetAllAzureKeyVaultSecretsAsync(keyVaultUrl);
+```
+
+**Get current settings from API:**
 
 ```csharp
 var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
@@ -69,7 +84,7 @@ var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
 var response = await client.GetSettingsAsync<MyHealthCheckBasicSettings>();
 ```
 
-Update settings in API:
+**Update settings in API:**
 
 You can update the settings in `azureSecrets` returned.
 
