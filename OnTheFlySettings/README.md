@@ -6,8 +6,11 @@
 |---------------------------|:---:|:---:|
 |*OnTheFlySettings*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings)](https://www.nuget.org/packages/OnTheFlySettings)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings)](https://www.nuget.org/packages/OnTheFlySettings)|
 |*OnTheFlySettings.Client*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.Client)](https://www.nuget.org/packages/OnTheFlySettings.Client)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.Client)](https://www.nuget.org/packages/OnTheFlySettings.Client)|
+|*OnTheFlySettings.AzureKeyVault.Client*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.AzureKeyVault.Client)](https://www.nuget.org/packages/OnTheFlySettings.AzureKeyVault.Client)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.AzureKeyVault.Client)](https://www.nuget.org/packages/OnTheFlySettings.AzureKeyVault.Client)|
 
 ### Supports .NET 6/7/8/9/10.
+
+![On The Fly Settings](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/OnTheFlySettings.jpg)
 
 This project is a AspNetCore library that provides a way to `update API/App settings on-the-fly`.
 
@@ -15,21 +18,13 @@ This project is a AspNetCore library that provides a way to `update API/App sett
 
 It supports `various settings sources`.
 
-You add the library to your project by adding the NuGet package:
-
-```bash
-dotnet add package OnTheFlySettings
-```
-or
-```bash
-Install-Package OnTheFlySettings
-```
-
 ## Plugging in the framework
+
+You may keep your `settings in your application's appsettings.json`.
 
 ### Create settings section
 
-Create a section in your appsettings.json for the settings that you want to update on-the-fly:
+Create a section in your `appsettings.json` for the settings that you want to update on-the-fly:
 
 ```json
 {
@@ -98,11 +93,12 @@ Add the endpoints to your application:
 ```csharp
 app.MapGetOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.							
 
 app.MapPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
+							
 ```
 
 Thats it!
@@ -298,11 +294,15 @@ To add the endpoints to your application, you can use the following code in your
 ```csharp
 app.MapGetOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
 
 app.MapPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
+
+app.MapAzurePutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
 ```
 
 Default routes to the endpoints are:
@@ -318,11 +318,15 @@ but you can customize the routes by providing your own route templates:
 ```csharp
 app.MapGetOnTheFlySettings("/my-custom-route")
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
 
 app.MapPutReplaceOnTheFlySettings("/my-custom-route/replace")
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
+
+app.MapAzurePutReplaceOnTheFlySettings("/my-custom-route/azure/replace")
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
 ```
 
 ### Get settings
