@@ -23,7 +23,7 @@ namespace OnTheFlySettings.Tests
 
                 settings.Azure.KeyVaultUrl = "https://ontheflysettings.vault.azure.net/";
                 
-                settings.Azure.UseManagedIdentity = true;
+                //settings.Azure.UseManagedIdentity = true;
                 // OR                
                 settings.Azure.Credentials.TenantId = tenantId;
                 settings.Azure.Credentials.ClientId = clientId;
