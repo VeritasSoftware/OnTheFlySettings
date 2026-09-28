@@ -44,7 +44,8 @@ public interface IOnTheFlySettingsClient
     Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(CancellationToken cancellationToken = default);
     Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(string keyVaultUrl, CancellationToken cancellationToken = default);
     Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
-                                                Action<HttpRequestHeaders> addHeaders = null);
+                                                Action<HttpRequestHeaders> addHeaders = null)
+        where TSettings : class, new();
     Task<bool> ReplaceSettingsAsync(IDictionary<string, string> newSettings,
                                     string route = "/settings/azure/replace",
                                     Action<HttpRequestHeaders> addHeaders = null);

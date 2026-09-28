@@ -69,6 +69,7 @@ namespace OnTheFlySettings.AzureKeyVault.Client
 
         public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
                                                                  Action<HttpRequestHeaders> addHeaders = null)
+            where TSettings: class, new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get,  route);
 

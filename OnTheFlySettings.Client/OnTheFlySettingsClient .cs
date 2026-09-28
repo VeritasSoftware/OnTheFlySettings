@@ -19,6 +19,7 @@ namespace OnTheFlySettings.Client
 
         public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
                                                                  Action<HttpRequestHeaders> addHeaders = null)
+            where TSettings : class, new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get,  route);
 
@@ -61,7 +62,7 @@ namespace OnTheFlySettings.Client
         public async Task<bool> ReplaceSettingsAsync<TSettings>(TSettings newSettings,
                                                                 string route = "/settings/replace",
                                                                 Action<HttpRequestHeaders> addHeaders = null)
-            where TSettings : class
+            where TSettings : class, new()
         {
             if (newSettings == null)
                 throw new ArgumentNullException(nameof(newSettings));

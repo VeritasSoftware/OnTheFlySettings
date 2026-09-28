@@ -34,11 +34,12 @@ You can provide your headers (including Auth) if needed.
 public interface IOnTheFlySettingsClient
 {
     Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
-                                                Action<HttpRequestHeaders> addHeaders = null);
+                                                Action<HttpRequestHeaders> addHeaders = null)
+        where TSettings : class, new();
     Task<bool> ReplaceSettingsAsync<TSettings>(TSettings newSettings, 
                                                 string route = "/settings/replace",
                                                 Action<HttpRequestHeaders> addHeaders = null) 
-        where TSettings : class;
+        where TSettings : class, new();
 }
 ```
 
