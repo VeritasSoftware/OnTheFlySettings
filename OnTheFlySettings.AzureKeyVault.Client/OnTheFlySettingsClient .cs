@@ -25,13 +25,22 @@ namespace OnTheFlySettings.AzureKeyVault.Client
             _clientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
         }
 
-        public async Task<IEnumerable<AzureSecret>> GetAllAzureSecretsAsync(CancellationToken cancellationToken = default)
+        public async Task<IDictionary<string, string>> GetAllAzureKeyVaultSecretsAsync(CancellationToken cancellationToken = default)
         {
-            var credential = new ClientSecretCredential(_clientSettings.Azure.Credentials.TenantId,
+            SecretClient keyVaultClient;
+
+            if (_clientSettings.Azure.UseManagedIdentity)
+            {
+                keyVaultClient = new SecretClient(new Uri(_clientSettings.Azure.KeyVaultUrl), new DefaultAzureCredential());
+            }
+            else
+            {
+                var credential = new ClientSecretCredential(_clientSettings.Azure.Credentials.TenantId,
                                                         _clientSettings.Azure.Credentials.ClientId,
                                                         _clientSettings.Azure.Credentials.ClientSecret);
 
-            var keyVaultClient = new SecretClient(new Uri(_clientSettings.Azure.KeyVaultUrl), credential);
+                keyVaultClient = new SecretClient(new Uri(_clientSettings.Azure.KeyVaultUrl), credential);
+            }            
 
             AsyncPageable<SecretProperties> secretProperties = keyVaultClient.GetPropertiesOfSecretsAsync(cancellationToken);
 
@@ -44,7 +53,7 @@ namespace OnTheFlySettings.AzureKeyVault.Client
                 secrets.Add(response.Value);
             }
 
-            return secrets.Select(secret => new AzureSecret {  Name = secret.Name, Value = secret.Value });
+            return secrets.ToDictionary(x => x.Name, x => x.Value);
         }
 
         public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
@@ -88,14 +97,14 @@ namespace OnTheFlySettings.AzureKeyVault.Client
         /// <summary>
         /// Sends a PUT request to /settings/replace with a list of keyvaultsecrets.
         /// </summary>
-        public async Task<bool> ReplaceSettingsAsync(IEnumerable<AzureSecret> newSettings,
-                                                                string route = "/settings/replace",
-                                                                Action<HttpRequestHeaders> addHeaders = null)
+        public async Task<bool> ReplaceSettingsAsync(IDictionary<string, string> newSettings,
+                                                    string route = "/settings/azure/replace",
+                                                    Action<HttpRequestHeaders> addHeaders = null)
         {
             if (newSettings == null)
                 throw new ArgumentNullException(nameof(newSettings));
 
-            string json = JsonSerializer.Serialize(newSettings.ToDictionary(x => x.Name, x => x.Value),
+            string json = JsonSerializer.Serialize(newSettings,
             new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase

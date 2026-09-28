@@ -70,7 +70,7 @@ namespace OnTheFlySettings
             }
         }
 
-        public void Replace(Dictionary<string, string> newSettings)
+        public void Replace(IDictionary<string, string> newSettings)
         {
             lock (_lock)
             {
@@ -86,6 +86,7 @@ namespace OnTheFlySettings
                 Logger?.LogInformation("Replacing settings with new settings. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
                 _old = oldSettings;
                 MapToClass(newSettings);
+                newSettingsStr = JsonSerializer.Serialize(_current, options);
                 Logger?.LogInformation("Settings replaced successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
                 OnSettingsChanged?.Invoke(oldSettings, _current);
                 Logger?.LogInformation("OnSettingsChanged event invoked successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
@@ -95,13 +96,13 @@ namespace OnTheFlySettings
         /// <summary>
         /// Maps a dictionary of property names and values to an instance of type TSettings.
         /// </summary>
-        private void MapToClass(Dictionary<string, string> dict)
+        private void MapToClass(IDictionary<string, string> newSettings)
         {
-            if (dict == null) throw new ArgumentNullException(nameof(dict));
+            if (newSettings == null) throw new ArgumentNullException(nameof(newSettings));
 
             Type type = typeof(TSettings);
 
-            foreach (var kvp in dict)
+            foreach (var kvp in newSettings)
             {
                 // Find property (case-insensitive)
                 PropertyInfo? prop = type.GetProperty(kvp.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
@@ -110,7 +111,8 @@ namespace OnTheFlySettings
                     try
                     {
                         // Convert value to property type if needed
-                        object convertedValue = Convert.ChangeType(kvp.Value, prop.PropertyType);
+                        Type targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                        object convertedValue = Convert.ChangeType(kvp.Value, targetType);
                         prop.SetValue(_current, convertedValue);
                     }
                     catch

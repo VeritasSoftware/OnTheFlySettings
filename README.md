@@ -53,7 +53,7 @@ Create a section in your appsettings.json for the settings that you want to upda
 
 ### Create settings class
 
-Create a settings class called `MyHealthCheckBasicSettings` in your application:
+Create a settings class called `MyHealthCheckBasicSettings` (for eg.) in your application:
 
 ```csharp
 public class MyHealthCheckBasicSettings
@@ -105,6 +105,78 @@ app.MapGetOnTheFlySettings()
 app.MapPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
 							// or remove this line to allow anonymous access.
+```
+
+Thats it!
+
+## Plugging in the Azure framework
+
+You may keep your `settings as secrets in the Azure Key Vault`.
+
+In that case, you can do as shown below.
+
+### Create settings class
+
+Create a settings class called `MyHealthCheckBasicSettings` (for eg.) in your application:
+
+```csharp
+public class MyHealthCheckBasicSettings
+{
+    public int HealthCheckIntervalInMinutes { get; set; }
+    public string HealthCheckIntervalCronExpression { get; set; }
+    public string HealthCheckServerHubUrl { get; set; }
+    public bool PublishOnlyWhenNotHealthy { get; set; }
+    public bool AddHealthCheckMiddleware { get; set; }
+}
+```
+
+### Configuring the library
+
+Then you can configure the library in your `Startup.cs` or `Program.cs` file.
+
+Fetch the settings from `Azure Key Vault` & add to OnTheFlySettings framework:
+
+```csharp
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using OnTheFlySettings;
+```
+
+```csharp
+string keyVaultName = "myazurekeyvault";
+var kvUri = "https://" + keyVaultName + ".vault.azure.net";
+
+var credential = new ClientSecretCredential("<<your tenantId here>>",
+                                            "<<your clientId here>>",
+                                            "<<your clientSecret here>>");
+
+var client = new SecretClient(new Uri(kvUri), credential);
+
+var appBasicSettings = new MyHealthCheckBasicSettings
+{
+    HealthCheckIntervalInMinutes = int.Parse((await client.GetSecretAsync("HealthCheckIntervalInMinutes")).Value.Value),
+    HealthCheckIntervalCronExpression = (await client.GetSecretAsync("HealthCheckIntervalCronExpression")).Value.Value,
+    HealthCheckServerHubUrl = (await client.GetSecretAsync("HealthCheckServerHubUrl")).Value.Value,
+    PublishOnlyWhenNotHealthy = bool.Parse((await client.GetSecretAsync("PublishOnlyWhenNotHealthy")).Value.Value),
+    AddHealthCheckMiddleware = bool.Parse((await client.GetSecretAsync("AddHealthCheckMiddleware")).Value.Value)
+};
+
+// Add the settings to the OnTheFlySettings framework
+builder.Services.AddOnTheFlySettings(appBasicSettings);
+```
+
+Library provides Minimal API endpoints for reading and updating settings. Read [more](#endpoints-readupdate-settings-on-the-fly).
+
+Add the endpoints to your application:
+
+```csharp
+app.MapGetOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
+
+app.MapAzurePutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
 ```
 
 Thats it!
@@ -235,6 +307,8 @@ Default routes to the endpoints are:
 
 - PUT /settings/replace
 
+- PUT /settings/azure/replace
+
 but you can customize the routes by providing your own route templates:
 
 ```csharp
@@ -262,3 +336,11 @@ A .NET Client library is provided for interacting with the endpoints.
 Read [more](/OnTheFlySettings.Client).
 
 [Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsClientTests.cs)
+
+## .NET Azure Client for endpoints
+
+A .NET Azure Client library is provided for interacting with the endpoints.
+
+Read [more](/OnTheFlySettings.AzureKeyVault.Client).
+
+[Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsAzureClientTests.cs)
