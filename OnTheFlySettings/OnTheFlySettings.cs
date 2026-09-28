@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 
 namespace OnTheFlySettings
 {
@@ -66,6 +67,59 @@ namespace OnTheFlySettings
                 Logger?.LogInformation("Settings replaced successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
                 OnSettingsChanged?.Invoke(oldSettings, newSettings);
                 Logger?.LogInformation("OnSettingsChanged event invoked successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
+            }
+        }
+
+        public void Replace(IDictionary<string, string> newSettings)
+        {
+            lock (_lock)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                var oldSettingsStr = JsonSerializer.Serialize(_current, options);
+                var newSettingsStr = JsonSerializer.Serialize(newSettings, options);
+
+                var oldSettings = _current;
+                Logger?.LogInformation("Replacing settings with new settings. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
+                _old = oldSettings;
+                MapToClass(newSettings);
+                newSettingsStr = JsonSerializer.Serialize(_current, options);
+                Logger?.LogInformation("Settings replaced successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
+                OnSettingsChanged?.Invoke(oldSettings, _current);
+                Logger?.LogInformation("OnSettingsChanged event invoked successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
+            }
+        }
+
+        /// <summary>
+        /// Maps a dictionary of property names and values to an instance of type TSettings.
+        /// </summary>
+        private void MapToClass(IDictionary<string, string> newSettings)
+        {
+            if (newSettings == null) throw new ArgumentNullException(nameof(newSettings));
+
+            Type type = typeof(TSettings);
+
+            foreach (var kvp in newSettings)
+            {
+                // Find property (case-insensitive)
+                PropertyInfo? prop = type.GetProperty(kvp.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                if (prop != null && prop.CanWrite)
+                {
+                    try
+                    {
+                        // Convert value to property type if needed
+                        Type targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                        object convertedValue = Convert.ChangeType(kvp.Value, targetType);
+                        prop.SetValue(_current, convertedValue);
+                    }
+                    catch
+                    {
+                        // Ignore if conversion fails
+                    }
+                }
             }
         }
     }

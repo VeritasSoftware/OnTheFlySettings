@@ -57,5 +57,15 @@
 
             return routeHandler;
         }
+
+        public static RouteHandlerBuilder MapAzurePutReplaceOnTheFlySettings(this WebApplication app, string? route = null)
+        {
+            var routeHandler = app.MapPut(route ?? "/settings/azure/replace", (IDictionary<string, string> newSettings, IOnTheFlySettings settingsHolder) => {
+                settingsHolder.Replace(newSettings);
+                return Results.Ok("Settings replaced");
+            });
+
+            return routeHandler;
+        }
     }
 }
