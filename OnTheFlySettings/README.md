@@ -143,6 +143,8 @@ using OnTheFlySettings;
 ```
 
 ```csharp
+var builder = WebApplication.CreateBuilder(args);
+
 string keyVaultName = "myazurekeyvault";
 var kvUri = "https://" + keyVaultName + ".vault.azure.net";
 
