@@ -113,6 +113,8 @@ Thats it!
 
 You may keep your `settings as secrets in the Azure Key Vault`.
 
+![Azure Secrets](/Images/AzureKeyVaultSecrets.png)
+
 In that case, you can do as shown below.
 
 ### Create settings class
