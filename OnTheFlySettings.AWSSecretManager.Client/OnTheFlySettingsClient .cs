@@ -1,5 +1,6 @@
 ﻿
 using Amazon;
+using Amazon.Runtime;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using System;
@@ -29,11 +30,17 @@ namespace OnTheFlySettings.AWSSecretManager.Client
         private async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsInternalAsync(RegionEndpoint region, 
                                                                                                 CancellationToken cancellationToken = default)
         {
-            // Create AWS Secrets Manager client
-            // Ensure AWS credentials are configured via environment variables, profile, or IAM role
-            var client = new AmazonSecretsManagerClient(_clientSettings.AWS.Credentials.AccessKeyId, _clientSettings.AWS.Credentials.SecretAccessKey, region); // Change region if needed
+            AmazonSecretsManagerClient client;
 
-            Console.WriteLine("Listing all secrets from AWS Secrets Manager...\n");
+            if (_clientSettings.AWS.UseDefaultAWSCredentialChain)
+            {
+                client = new AmazonSecretsManagerClient(region);
+            }
+            else
+            {
+                var credentials = new BasicAWSCredentials(_clientSettings.AWS.Credentials.AccessKeyId, _clientSettings.AWS.Credentials.SecretAccessKey);
+                client = new AmazonSecretsManagerClient(credentials, region);
+            }
 
             string nextToken = null;
 
