@@ -16,6 +16,10 @@ This project is a AspNetCore library that provides a way to `update API/App sett
 
 ### Zero downtime! At runtime! No need to restart your API/App!
 
+You can keep your settings in `appsettings.json` **or** as `secrets` in `Azure Key Vault`, `AWS Secret Manager`.
+
+There are .NET clients provided to get your secrets and update the settings in your API/App.
+
 It supports `various settings sources`.
 
 ## Plugging in the framework

@@ -1,4 +1,4 @@
-# OnTheFlySettings.AzureKeyVault.Client
+# OnTheFlySettings.AWSSecretManager.Client
 
 [![.NET Build & Test](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml/badge.svg)](https://github.com/VeritasSoftware/OnTheFlySettings/actions/workflows/dotnet.yml)
 

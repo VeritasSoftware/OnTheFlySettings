@@ -16,6 +16,10 @@ This project is a AspNetCore library that provides a way to `update API/App sett
 
 ### Zero downtime! At runtime! No need to restart your API/App!
 
+You can keep your settings in `appsettings.json` **or** as `secrets` in `Azure Key Vault`, `AWS Secret Manager`.
+
+There are .NET clients provided to get your secrets and update the settings in your API/App.
+
 It supports `various settings sources`.
 
 ## Plugging in the framework
@@ -181,6 +185,92 @@ app.MapAzurePutReplaceOnTheFlySettings()
 
 Thats it!
 
+## Plugging in the AWS framework
+
+You may keep your `settings as secrets in the AWS Secret Manager`. 
+
+The Secret Id can be anything you want.
+
+![AWS Secrets](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/AWSSecretManagerSecrets.png)
+
+In that case, you can do as shown below.
+
+### Create settings class
+
+Create a settings class called `MyHealthCheckBasicSettings` (for eg.) in your application:
+
+```csharp
+public class MyHealthCheckBasicSettings
+{
+    public int HealthCheckIntervalInMinutes { get; set; }
+    public string HealthCheckIntervalCronExpression { get; set; }
+    public string HealthCheckServerHubUrl { get; set; }
+    public bool PublishOnlyWhenNotHealthy { get; set; }
+    public bool AddHealthCheckMiddleware { get; set; }
+}
+```
+
+### Configuring the library
+
+Then you can configure the library in your `Startup.cs` or `Program.cs` file.
+
+Fetch the settings from `AWS Secret Manager` & add to OnTheFlySettings framework:
+
+```csharp
+using Amazon.Runtime;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
+using OnTheFlySettings;
+```
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+var credentials = new BasicAWSCredentials("<<Your access key id here>>", "<<Your secret access key here>>");
+var client = new AmazonSecretsManagerClient(credentials, Amazon.RegionEndpoint.APSoutheast2); // RegionEndpoint as per your regiom
+
+var secretRequest = new GetSecretValueRequest
+{
+    SecretId = "MyHealthCheckBasicSettings", // Your secret id here
+    VersionStage = "AWSCURRENT"
+};
+
+var secretResponse = await client.GetSecretValueAsync(secretRequest);
+
+var appBasicSettingsDictionary = JsonSerializer.Deserialize<IDictionary<string, string>>(secretResponse.SecretString);
+
+if (appBasicSettingsDictionary == null)
+    throw new ApplicationException("Settings not found");
+
+var appBasicSettings = new MyHealthCheckBasicSettings
+{
+    HealthCheckIntervalInMinutes = int.Parse(appBasicSettingsDictionary["HealthCheckIntervalInMinutes"]),
+    HealthCheckIntervalCronExpression = appBasicSettingsDictionary["HealthCheckIntervalCronExpression"],
+    HealthCheckServerHubUrl = appBasicSettingsDictionary["HealthCheckServerHubUrl"],
+    PublishOnlyWhenNotHealthy = bool.Parse(appBasicSettingsDictionary["PublishOnlyWhenNotHealthy"]),
+    AddHealthCheckMiddleware = bool.Parse(appBasicSettingsDictionary["AddHealthCheckMiddleware"])
+};
+
+// Add the settings to the OnTheFlySettings framework
+builder.Services.AddOnTheFlySettings(appBasicSettings);
+```
+
+Library provides Minimal API endpoints for reading and updating settings. Read [more](#endpoints-readupdate-settings-on-the-fly).
+
+Add the endpoints to your application:
+
+```csharp
+app.MapGetOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
+
+app.MapAWSPutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
+```
+
+Thats it!
+
 ## Usage in your API/App
 
 The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
@@ -303,6 +393,10 @@ app.MapPutReplaceOnTheFlySettings()
 app.MapAzurePutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
                             // or remove this line to allow anonymous access.
+
+app.MapAWSPutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
 ```
 
 Default routes to the endpoints are:
@@ -312,6 +406,8 @@ Default routes to the endpoints are:
 - PUT /settings/replace
 
 - PUT /settings/azure/replace
+
+- PUT /settings/aws/replace
 
 but you can customize the routes by providing your own route templates:
 
@@ -325,6 +421,10 @@ app.MapPutReplaceOnTheFlySettings("/my-custom-route/replace")
                             // or remove this line to allow anonymous access.
 
 app.MapAzurePutReplaceOnTheFlySettings("/my-custom-route/azure/replace")
+   .RequireAuthorization(); // Provide your own authorization policy here
+                            // or remove this line to allow anonymous access.
+
+app.MapAWSPutReplaceOnTheFlySettings("/my-custom-route/aws/replace")
    .RequireAuthorization(); // Provide your own authorization policy here
                             // or remove this line to allow anonymous access.
 ```
