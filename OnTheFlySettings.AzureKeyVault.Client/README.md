@@ -12,6 +12,10 @@
 
 The .NET Client library allows you to interact with the OnTheFlySettings GET & PUT endpoints.
 
+Let us say your settings are secrets in Azure Key Vault.
+
+![Azure Secrets](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/AzureKeyVaultSecrets.png)
+
 You add the library to your project in your `Program.cs` or `Startup.cs`:
 
 ```csharp

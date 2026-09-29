@@ -22,12 +22,12 @@ namespace OnTheFlySettings.Tests
                 var secretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
 
                 settings.AWS.SecretId = "MyHealthCheckBasicSettings";
-                settings.AWS.Region = region!;
+                settings.AWS.Region = region;
 
                 //settings.AWS.UseDefaultAWSCredentialChain = true;
                 // OR
-                settings.AWS.Credentials.AccessKeyId = accessKeyId!;
-                settings.AWS.Credentials.SecretAccessKey = secretAccessKey!;
+                settings.AWS.Credentials.AccessKeyId = accessKeyId;
+                settings.AWS.Credentials.SecretAccessKey = secretAccessKey;
             });
 
             _serviceProvider = services.BuildServiceProvider();
