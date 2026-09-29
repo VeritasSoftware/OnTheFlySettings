@@ -4,6 +4,7 @@ using Amazon.Runtime;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -25,9 +26,8 @@ namespace OnTheFlySettings.AWSSecretManager.Client
             _clientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
         }
 
-        private async Task<TSettings?> GetAllAWSSecretManagerSecretsInternalAsync<TSettings>(string secretId, RegionEndpoint region, 
+        private async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsInternalAsync(string secretId, RegionEndpoint region, 
                                                                                                 CancellationToken cancellationToken = default)
-            where TSettings: class, new()
         {
             AmazonSecretsManagerClient client;
 
@@ -53,27 +53,29 @@ namespace OnTheFlySettings.AWSSecretManager.Client
             {
                  PropertyNameCaseInsensitive = true
             };
-            options.Converters.Add(new UniversalPrimitiveConverterFactory());
 
-            var settings = JsonSerializer.Deserialize<TSettings>(secretResponse.SecretString, options);
+            var settings = JsonSerializer.Deserialize<IDictionary<string, string>>(secretResponse.SecretString, options);
+
+            if (settings == null)
+            {
+                return new Dictionary<string, string>();
+            }
 
             return settings;
         }
 
-        public async Task<TSettings?> GetAllAWSSecretManagerSecretsAsync<TSettings>(CancellationToken cancellationToken = default)
-            where TSettings : class, new()
+        public async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsAsync(CancellationToken cancellationToken = default)
         {
-            return await GetAllAWSSecretManagerSecretsInternalAsync<TSettings>(_clientSettings.AWS.SecretId, RegionEndpoint.GetBySystemName(_clientSettings.AWS.Region), cancellationToken);
+            return await GetAllAWSSecretManagerSecretsInternalAsync(_clientSettings.AWS.SecretId, RegionEndpoint.GetBySystemName(_clientSettings.AWS.Region), cancellationToken);
         }
 
-        public async Task<TSettings?> GetAllAWSSecretManagerSecretsAsync<TSettings>(string secretId, string region, CancellationToken cancellationToken = default)
-            where TSettings : class, new()
+        public async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsAsync(string secretId, string region, CancellationToken cancellationToken = default)
         {
-            return await GetAllAWSSecretManagerSecretsInternalAsync<TSettings>(secretId, RegionEndpoint.GetBySystemName(region), cancellationToken);
+            return await GetAllAWSSecretManagerSecretsInternalAsync(secretId, RegionEndpoint.GetBySystemName(region), cancellationToken);
         }
 
-        public async Task<TSettings?> GetSettingsAsync<TSettings>(string route = "/settings",
-                                                                 Action<HttpRequestHeaders>? addHeaders = null)
+        public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
+                                                                 Action<HttpRequestHeaders> addHeaders = null)
             where TSettings: class, new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get,  route);
@@ -114,10 +116,9 @@ namespace OnTheFlySettings.AWSSecretManager.Client
         /// <summary>
         /// Sends a PUT request to /settings/replace with a generic newSettings.
         /// </summary>
-        public async Task<bool> ReplaceSettingsAsync<TSettings>(TSettings newSettings,
-                                                                string route = "/settings/replace",
-                                                                Action<HttpRequestHeaders>? addHeaders = null)
-            where TSettings : class, new()
+        public async Task<bool> ReplaceSettingsAsync(IDictionary<string, string> newSettings,
+                                                    string route = "/settings/aws/replace",
+                                                    Action<HttpRequestHeaders> addHeaders = null)
         {
             if (newSettings == null)
                 throw new ArgumentNullException(nameof(newSettings));

@@ -8,17 +8,14 @@ namespace OnTheFlySettings.AWSSecretManager.Client
 {
     public interface IOnTheFlySettingsClient
     {
-        Task<TSettings?> GetAllAWSSecretManagerSecretsAsync<TSettings>(CancellationToken cancellationToken = default)
+        Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsAsync(CancellationToken cancellationToken = default);
+        Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsAsync(string secretId, string region, CancellationToken cancellationToken = default);
+        Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
+                                                    Action<HttpRequestHeaders> addHeaders = null)
             where TSettings : class, new();
-        Task<TSettings?> GetAllAWSSecretManagerSecretsAsync<TSettings>(string secretId, string region, CancellationToken cancellationToken = default)
-            where TSettings : class, new();
-        Task<TSettings?> GetSettingsAsync<TSettings>(string route = "/settings",
-                                                    Action<HttpRequestHeaders>? addHeaders = null)
-            where TSettings : class, new();
-        Task<bool> ReplaceSettingsAsync<TSettings>(TSettings newSettings,
-                                                   string route = "/settings/replace",
-                                                   Action<HttpRequestHeaders>? addHeaders = null)
-            where TSettings : class, new();
+        Task<bool> ReplaceSettingsAsync(IDictionary<string, string> newSettings,
+                                        string route = "/settings/aws/replace",
+                                        Action<HttpRequestHeaders> addHeaders = null);
 
 
     }

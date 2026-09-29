@@ -38,36 +38,40 @@ namespace OnTheFlySettings.Tests
         public async Task ReplaceSettingsAsync()
         {
             // Arrange
-            var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();            
+            var client = _serviceProvider.GetRequiredService<IOnTheFlySettingsClient>();
+
+            // Get current settings from API
+            var oldSettings = await client.GetSettingsAsync<MyHealthCheckBasicSettings>();
 
             // Get AWS secrets
-            var basicSettings = await client.GetAllAWSSecretManagerSecretsAsync<MyHealthCheckBasicSettings>();
+            var awsSecrets = await client.GetAllAWSSecretManagerSecretsAsync();
            
-            Assert.NotNull(basicSettings);
+            Assert.NotNull(awsSecrets);
 
-            // Update settings
-            basicSettings.HealthCheckIntervalInMinutes = 30;
-            basicSettings.HealthCheckIntervalCronExpression = "*/5 * * * *";
-            basicSettings.HealthCheckServerHubUrl = "https://localhost:5001/newlivehealthcheckshub";
-            basicSettings.PublishOnlyWhenNotHealthy = true;
-            basicSettings.AddHealthCheckMiddleware = true;
+            // Update AWS secrets
+            awsSecrets["HealthCheckIntervalInMinutes"] = "60";
+            awsSecrets["HealthCheckServerHubUrl"] = "https://localhost:5001/newlivehealthcheckshub";
+            awsSecrets["AddHealthCheckMiddleware"] = "true";
+            awsSecrets.Remove("PublishOnlyWhenNotHealthy");
+            awsSecrets.Remove("HealthCheckIntervalCronExpression");
 
             // Act
             // Replace settings
-            var response = await client.ReplaceSettingsAsync(basicSettings);
+            var response = await client.ReplaceSettingsAsync(awsSecrets);
 
             // Get current settings from API
-            var currentBasicSettings = await client.GetSettingsAsync<MyHealthCheckBasicSettings>();
+            var updatedSettings = await client.GetSettingsAsync<MyHealthCheckBasicSettings>();
 
             // Asserts
             Assert.True(response);
-            Assert.NotNull(basicSettings);
-            Assert.NotNull(currentBasicSettings);            
-            Assert.Equal(basicSettings.PublishOnlyWhenNotHealthy, currentBasicSettings.PublishOnlyWhenNotHealthy);
-            Assert.Equal(basicSettings.HealthCheckIntervalCronExpression, currentBasicSettings.HealthCheckIntervalCronExpression);
-            Assert.Equal(basicSettings.HealthCheckIntervalInMinutes, currentBasicSettings.HealthCheckIntervalInMinutes);
-            Assert.Equal(basicSettings.HealthCheckServerHubUrl, currentBasicSettings.HealthCheckServerHubUrl);
-            Assert.Equal(basicSettings.AddHealthCheckMiddleware, currentBasicSettings.AddHealthCheckMiddleware);
+            Assert.NotNull(updatedSettings);
+            //Not updated
+            Assert.Equal(updatedSettings.PublishOnlyWhenNotHealthy, oldSettings.PublishOnlyWhenNotHealthy);
+            Assert.Equal(updatedSettings.HealthCheckIntervalCronExpression, oldSettings.HealthCheckIntervalCronExpression);
+            //Updated
+            Assert.Equal(updatedSettings.HealthCheckIntervalInMinutes, int.Parse(awsSecrets["HealthCheckIntervalInMinutes"]));
+            Assert.Equal(updatedSettings.HealthCheckServerHubUrl, awsSecrets["HealthCheckServerHubUrl"]);
+            Assert.Equal(updatedSettings.AddHealthCheckMiddleware, bool.Parse(awsSecrets["AddHealthCheckMiddleware"]));
         }
     }
 }
