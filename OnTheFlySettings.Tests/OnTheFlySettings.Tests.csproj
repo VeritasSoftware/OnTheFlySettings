@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OnTheFlySettings.AWSSecretManager.Client\OnTheFlySettings.AWSSecretManager.Client.csproj" />
     <ProjectReference Include="..\OnTheFlySettings.AzureKeyVault.Client\OnTheFlySettings.AzureKeyVault.Client.csproj" />
     <ProjectReference Include="..\OnTheFlySettings.Client\OnTheFlySettings.Client.csproj" />
     <ProjectReference Include="..\OnTheFlySettings\OnTheFlySettings.csproj" />

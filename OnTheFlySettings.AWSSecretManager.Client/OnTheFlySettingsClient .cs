@@ -4,8 +4,6 @@ using Amazon.Runtime;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -27,8 +25,9 @@ namespace OnTheFlySettings.AWSSecretManager.Client
             _clientSettings = clientSettings ?? throw new ArgumentNullException(nameof(clientSettings));
         }
 
-        private async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsInternalAsync(RegionEndpoint region, 
+        private async Task<TSettings?> GetAllAWSSecretManagerSecretsInternalAsync<TSettings>(string secretId, RegionEndpoint region, 
                                                                                                 CancellationToken cancellationToken = default)
+            where TSettings: class, new()
         {
             AmazonSecretsManagerClient client;
 
@@ -42,64 +41,39 @@ namespace OnTheFlySettings.AWSSecretManager.Client
                 client = new AmazonSecretsManagerClient(credentials, region);
             }
 
-            string nextToken = null;
-
-            IDictionary<string, string> secrets = new Dictionary<string, string>();
-
-            do
+            var secretRequest = new GetSecretValueRequest
             {
-                var request = new ListSecretsRequest
-                {
-                    MaxResults = 100, // AWS max per page
-                    NextToken = nextToken
-                };
+                SecretId = secretId,
+                VersionStage = "AWSCURRENT"
+            };
 
-                var response = await client.ListSecretsAsync(request, cancellationToken);
+            var secretResponse = await client.GetSecretValueAsync(secretRequest);
 
-                foreach (var secret in response.SecretList)
-                {
-                    var secretRequest = new GetSecretValueRequest
-                    {
-                        SecretId = secret.Name,
-                        VersionStage = "AWSCURRENT"
-                    };
+            var options = new JsonSerializerOptions
+            {
+                 PropertyNameCaseInsensitive = true
+            };
+            options.Converters.Add(new UniversalPrimitiveConverterFactory());
 
-                    var secretResponse = await client.GetSecretValueAsync(secretRequest, cancellationToken);
+            var settings = JsonSerializer.Deserialize<TSettings>(secretResponse.SecretString, options);
 
-                    string secretString;
-                    if (secretResponse.SecretString != null)
-                    {
-                        secretString = secretResponse.SecretString;
-                    }
-                    else
-                    {
-                        var memoryStream = secretResponse.SecretBinary;
-                        var reader = new StreamReader(memoryStream);
-                        secretString = Encoding.UTF8.GetString(Convert.FromBase64String(reader.ReadToEnd()));
-                    }
-
-                    secrets.Add(secret.Name, secretString);
-                }
-
-                nextToken = response.NextToken; // Continue if more pages exist
-
-            } while (!string.IsNullOrEmpty(nextToken));
-
-            return secrets;
+            return settings;
         }
 
-        public async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsAsync(CancellationToken cancellationToken = default)
+        public async Task<TSettings?> GetAllAWSSecretManagerSecretsAsync<TSettings>(CancellationToken cancellationToken = default)
+            where TSettings : class, new()
         {
-            return await GetAllAWSSecretManagerSecretsInternalAsync(RegionEndpoint.GetBySystemName(_clientSettings.AWS.Region), cancellationToken);
+            return await GetAllAWSSecretManagerSecretsInternalAsync<TSettings>(_clientSettings.AWS.SecretId, RegionEndpoint.GetBySystemName(_clientSettings.AWS.Region), cancellationToken);
         }
 
-        public async Task<IDictionary<string, string>> GetAllAWSSecretManagerSecretsAsync(string region, CancellationToken cancellationToken = default)
+        public async Task<TSettings?> GetAllAWSSecretManagerSecretsAsync<TSettings>(string secretId, string region, CancellationToken cancellationToken = default)
+            where TSettings : class, new()
         {
-            return await GetAllAWSSecretManagerSecretsInternalAsync(RegionEndpoint.GetBySystemName(region), cancellationToken);
+            return await GetAllAWSSecretManagerSecretsInternalAsync<TSettings>(secretId, RegionEndpoint.GetBySystemName(region), cancellationToken);
         }
 
-        public async Task<TSettings> GetSettingsAsync<TSettings>(string route = "/settings",
-                                                                 Action<HttpRequestHeaders> addHeaders = null)
+        public async Task<TSettings?> GetSettingsAsync<TSettings>(string route = "/settings",
+                                                                 Action<HttpRequestHeaders>? addHeaders = null)
             where TSettings: class, new()
         {
             var request = new HttpRequestMessage(HttpMethod.Get,  route);
@@ -138,17 +112,17 @@ namespace OnTheFlySettings.AWSSecretManager.Client
         }
 
         /// <summary>
-        /// Sends a PUT request to /settings/replace with a list of keyvaultsecrets.
+        /// Sends a PUT request to /settings/replace with a generic newSettings.
         /// </summary>
-        public async Task<bool> ReplaceSettingsAsync(IDictionary<string, string> newSettings,
-                                                    string route = "/settings/azure/replace",
-                                                    Action<HttpRequestHeaders> addHeaders = null)
+        public async Task<bool> ReplaceSettingsAsync<TSettings>(TSettings newSettings,
+                                                                string route = "/settings/replace",
+                                                                Action<HttpRequestHeaders>? addHeaders = null)
+            where TSettings : class, new()
         {
             if (newSettings == null)
                 throw new ArgumentNullException(nameof(newSettings));
 
-            string json = JsonSerializer.Serialize(newSettings,
-            new JsonSerializerOptions
+            string json = JsonSerializer.Serialize(newSettings, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
