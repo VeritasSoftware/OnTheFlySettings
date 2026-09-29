@@ -39,18 +39,18 @@
             return services;
         }
 
-        public static RouteHandlerBuilder MapGetOnTheFlySettings(this WebApplication app, string? route = null)
+        public static RouteHandlerBuilder MapGetOnTheFlySettings(this WebApplication app, string route = "/settings")
         {
-            var routeHandler = app.MapGet(route ?? "/settings", (IOnTheFlySettings settingsHolder) => {
+            var routeHandler = app.MapGet(route, (IOnTheFlySettings settingsHolder) => {
                 return settingsHolder.CurrentObject;
             });
 
             return routeHandler;
         }
 
-        public static RouteHandlerBuilder MapPutReplaceOnTheFlySettings(this WebApplication app, string? route = null)
+        public static RouteHandlerBuilder MapPutReplaceOnTheFlySettings(this WebApplication app, string route = "/settings/replace")
         {
-            var routeHandler = app.MapPut(route ?? "/settings/replace", (object newSettings, IOnTheFlySettings settingsHolder) => {
+            var routeHandler = app.MapPut(route, (object newSettings, IOnTheFlySettings settingsHolder) => {
                 settingsHolder.Replace(newSettings);
                 return Results.Ok("Settings replaced");
             });
@@ -58,9 +58,9 @@
             return routeHandler;
         }
 
-        public static RouteHandlerBuilder MapAzurePutReplaceOnTheFlySettings(this WebApplication app, string? route = null)
+        public static RouteHandlerBuilder MapAzurePutReplaceOnTheFlySettings(this WebApplication app, string route = "/settings/azure/replace")
         {
-            var routeHandler = app.MapPut(route ?? "/settings/azure/replace", (IDictionary<string, string> newSettings, IOnTheFlySettings settingsHolder) => {
+            var routeHandler = app.MapPut(route, (IDictionary<string, string> newSettings, IOnTheFlySettings settingsHolder) => {
                 settingsHolder.Replace(newSettings);
                 return Results.Ok("Settings replaced");
             });
