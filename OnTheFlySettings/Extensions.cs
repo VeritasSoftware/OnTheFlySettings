@@ -67,5 +67,15 @@
 
             return routeHandler;
         }
+
+        public static RouteHandlerBuilder MapAWSPutReplaceOnTheFlySettings(this WebApplication app, string route = "/settings/aws/replace")
+        {
+            var routeHandler = app.MapPut(route, (IDictionary<string, string> newSettings, IOnTheFlySettings settingsHolder) => {
+                settingsHolder.Replace(newSettings);
+                return Results.Ok("Settings replaced");
+            });
+
+            return routeHandler;
+        }
     }
 }
