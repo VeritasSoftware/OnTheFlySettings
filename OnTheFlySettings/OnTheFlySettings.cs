@@ -11,10 +11,11 @@ namespace OnTheFlySettings
         private readonly object _lock = new();
         public event Func<TSettings?, TSettings, Task>? OnSettingsChanged;
         public ILogger? Logger { get; set; }
+        public Action<IDictionary<string, string>, TSettings>? Map { get; set; }
 
         public OnTheFlySettings(TSettings settings)
-        {
-            _current = settings;
+        {            
+            _current = Clone(settings);
         }
 
         public TSettings Current
@@ -38,6 +39,18 @@ namespace OnTheFlySettings
 
             if (newSettings is JsonElement jsonElement)
             {
+                if (Map != null)
+                {
+                    var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonElement.GetRawText());
+                    if (dict != null)
+                    {
+                        var settings = new TSettings();
+                        Map(dict, settings);
+                        Replace(settings);
+                        return;
+                    }
+                    return;
+                }
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -82,13 +95,23 @@ namespace OnTheFlySettings
                 var oldSettingsStr = JsonSerializer.Serialize(_current, options);
                 var newSettingsStr = JsonSerializer.Serialize(newSettings, options);
 
-                var oldSettings = _current;
                 Logger?.LogInformation("Replacing settings with new settings. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
-                _old = oldSettings;
-                MapToClass(newSettings);
+                _old = Clone(_current);
+
+                if (Map != null)
+                {
+                    var settings = new TSettings();
+                    Map(newSettings, settings);
+                    _current = settings;
+                }
+                else
+                {
+                    MapToClass(newSettings);
+                }
+                
                 newSettingsStr = JsonSerializer.Serialize(_current, options);
                 Logger?.LogInformation("Settings replaced successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
-                OnSettingsChanged?.Invoke(oldSettings, _current);
+                OnSettingsChanged?.Invoke(_old, _current);
                 Logger?.LogInformation("OnSettingsChanged event invoked successfully. Old settings: {OldSettings}, New settings: {NewSettings}", oldSettingsStr, newSettingsStr);
             }
         }
@@ -100,7 +123,7 @@ namespace OnTheFlySettings
         {
             if (newSettings == null) throw new ArgumentNullException(nameof(newSettings));
 
-            Type type = typeof(TSettings);
+            Type type = typeof(TSettings);            
 
             foreach (var kvp in newSettings)
             {
@@ -121,6 +144,16 @@ namespace OnTheFlySettings
                     }
                 }
             }
+        }
+
+        private TSettings Clone(TSettings settings)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            var json = JsonSerializer.Serialize(settings, options);
+            return JsonSerializer.Deserialize<TSettings>(json, options)!;
         }
     }
 }

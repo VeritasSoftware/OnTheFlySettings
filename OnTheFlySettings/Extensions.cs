@@ -2,28 +2,29 @@
 {
     public static class Extensions
     {
-        public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, TSettings settings)
+        public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, TSettings settings, Action<IDictionary<string, string>, TSettings>? map = null)
             where TSettings : class, new()
         {
-            return services.AddOnTheFlySettingsInternal(settings);
+            return services.AddOnTheFlySettingsInternal(settings, map);
         }
 
-        public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, Action<TSettings> configure)
+        public static IServiceCollection AddOnTheFlySettings<TSettings>(this IServiceCollection services, Action<TSettings> configure, Action<IDictionary<string, string>, TSettings>? map = null)
             where TSettings : class, new()
         {
             var settings = new TSettings();
 
             configure(settings);
 
-            return services.AddOnTheFlySettingsInternal(settings);
+            return services.AddOnTheFlySettingsInternal(settings, map);
         }
 
-        private static IServiceCollection AddOnTheFlySettingsInternal<TSettings>(this IServiceCollection services, TSettings settings)
+        private static IServiceCollection AddOnTheFlySettingsInternal<TSettings>(this IServiceCollection services, TSettings settings, Action<IDictionary<string, string>, TSettings>? map = null)
             where TSettings : class, new()
         {
             services.AddSingleton(settings);
 
             var onTheFlySettings = new OnTheFlySettings<TSettings>(settings);
+            onTheFlySettings.Map = map;
 
             services.AddSingleton<IOnTheFlySettings>(sp => {
                 var factory = sp.GetService<ILoggerFactory>();
