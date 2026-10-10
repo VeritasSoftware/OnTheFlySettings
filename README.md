@@ -271,6 +271,27 @@ app.MapAWSPutReplaceOnTheFlySettings()
 
 Thats it!
 
+### Map
+
+If you want to have different names for your settings than the property names in your class, 
+
+you can use the `map` overload to map your settings to properties in you class.
+
+```csharp
+// Add the settings to the OnTheFlySettings framework
+builder.Services.AddOnTheFlySettings(appBasicSettings, Map);
+
+
+static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSettings settings)
+{
+    settings.HealthCheckIntervalInMinutes = int.Parse(dictionary["intervalInMinutes"]);
+    settings.HealthCheckIntervalCronExpression = dictionary["intervalCronExpression"];
+    settings.HealthCheckServerHubUrl = dictionary["serverHubUrl"];
+    settings.PublishOnlyWhenNotHealthy = bool.Parse(dictionary["onlyWhenNotHealthy"]);
+    settings.AddHealthCheckMiddleware = bool.Parse(dictionary["addMiddleware"]);
+}
+```
+
 ## Usage in your API/App
 
 The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
