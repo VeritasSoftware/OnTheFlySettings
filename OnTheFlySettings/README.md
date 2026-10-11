@@ -27,11 +27,13 @@ It supports `various settings sources`.
 
 - [Plugging in the framework](#plugging-in-the-framework)
 - [Plugging in the Azure framework](#plugging-in-the-azure-framework)
+- [Plugging in the AWS framework](#plugging-in-the-aws-framework)
 - [Usage in your API/App](#usage-in-your-apiapp)
     - [Accessing Current Settings](#accessing-current-settings)
         - [Using IOptionsSnapshot\<T\>](#using-ioptionssnapshott)
         - [Using IOnTheFlySettings\<TSettings\>](#using-iontheflysettingstsettings)
     - [Events](#events)
+    - [Map](#map)
 - [Endpoints - read/update settings on-the-fly](#endpoints---readupdate-settings-on-the-fly)
 
 ## Plugging in the framework
@@ -297,29 +299,6 @@ Thats it!
 
 [Table of Contents](#table-of-contents)
 
-### Map
-
-If you want to have different names for your settings than the property names in your class, 
-
-you can use the `map` overload to map your settings to properties in you class.
-
-```csharp
-// Add the settings to the OnTheFlySettings framework
-builder.Services.AddOnTheFlySettings(appBasicSettings, Map);
-
-
-static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSettings settings)
-{
-    settings.HealthCheckIntervalInMinutes = int.Parse(dictionary["intervalInMinutes"]);
-    settings.HealthCheckIntervalCronExpression = dictionary["intervalCronExpression"];
-    settings.HealthCheckServerHubUrl = dictionary["serverHubUrl"];
-    settings.PublishOnlyWhenNotHealthy = bool.Parse(dictionary["onlyWhenNotHealthy"]);
-    settings.AddHealthCheckMiddleware = bool.Parse(dictionary["addMiddleware"]);
-}
-```
-
-[Table of Contents](#table-of-contents)
-
 ## Usage in your API/App
 
 ### Accessing Current Settings
@@ -442,6 +421,29 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 {
     // Handle the settings change event here
 };
+```
+
+[Table of Contents](#table-of-contents)
+
+### Map
+
+If you want to have different names for your settings than the property names in your class, 
+
+you can use the `map` overload to map your settings to properties in you class.
+
+```csharp
+// Add the settings to the OnTheFlySettings framework
+builder.Services.AddOnTheFlySettings(appBasicSettings, Map);
+
+
+static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSettings settings)
+{
+    settings.HealthCheckIntervalInMinutes = int.Parse(dictionary["intervalInMinutes"]);
+    settings.HealthCheckIntervalCronExpression = dictionary["intervalCronExpression"];
+    settings.HealthCheckServerHubUrl = dictionary["serverHubUrl"];
+    settings.PublishOnlyWhenNotHealthy = bool.Parse(dictionary["onlyWhenNotHealthy"]);
+    settings.AddHealthCheckMiddleware = bool.Parse(dictionary["addMiddleware"]);
+}
 ```
 
 [Table of Contents](#table-of-contents)
