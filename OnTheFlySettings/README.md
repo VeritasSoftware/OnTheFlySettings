@@ -23,6 +23,8 @@ There are .NET clients provided to get your secrets and update the settings in y
 
 It supports `various settings sources`.
 
+### Demo application is available [here](https://github.com/VeritasSoftware/OnTheFlySettings/tree/master/OnTheFlySettings.Demo).
+
 ## Table of Contents
 
 - [Plugging in the framework](#plugging-in-the-framework)
