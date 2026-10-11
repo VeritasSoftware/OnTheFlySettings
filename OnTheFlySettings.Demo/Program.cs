@@ -11,6 +11,8 @@ Console.WriteLine("On The Fly Settings Demo!");
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Configuration
+
 builder.Configuration
        .SetBasePath(Directory.GetCurrentDirectory())
        .AddJsonFile("appsettings.json", false, true);
@@ -20,6 +22,8 @@ var appBasicSettings = builder.Configuration.GetSection("MyHealthCheckBasicSetti
 
 if (appBasicSettings == null)
     throw new ApplicationException("Settings not found.");
+
+#endregion
 
 #region Azure
 
