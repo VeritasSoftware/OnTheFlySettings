@@ -38,7 +38,7 @@
             });
 
             services.AddOptions<TSettings>()
-            .Configure((TSettings options, IOnTheFlySettings<TSettings> onTheFly) =>
+            .Configure(options =>
             {
                 var currentSettings = onTheFlySettings.Current;
                 foreach (var property in typeof(TSettings).GetProperties())
