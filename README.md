@@ -483,9 +483,9 @@ app.MapAWSPutReplaceOnTheFlySettings("/my-custom-route/aws/replace")
 
 ![Sample Screenshot](Images/PutSettings.png)
 
-When using the Azure/AWS PUT endpoint all setting values must be strings.
+When using the Azure/AWS PUT endpoint, all setting values must be strings.
 
-These endpoints are meant to automate fetching a updating settings from Azure Key Vault/AWS Secret Manager which store string values.
+These endpoints are meant to automate fetching and updating settings from Azure Key Vault/AWS Secret Manager which store string values.
 
 ![Sample Screenshot](Images/PutSettings_Azure_AWS.png)
 
