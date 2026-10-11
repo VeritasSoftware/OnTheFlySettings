@@ -23,6 +23,21 @@ There are .NET clients provided to get your secrets and update the settings in y
 
 It supports `various settings sources`.
 
+## Table of Contents
+
+- [Plugging in the framework](#plugging-in-the-framework)
+- [Plugging in the Azure framework](#plugging-in-the-azure-framework)
+- [Usage in your API/App](#usage-in-your-apiapp)
+    - [Accessing Current Settings](#accessing-current-settings)
+        - [Using IOptionsSnapshot\<T\>](#using-ioptionssnapshott)
+        - [Using IOnTheFlySettings\<TSettings\>](#using-iontheflysettingstsettings)
+    - [Events](#events)
+- [Endpoints - read/update settings on-the-fly](#endpoints---readupdate-settings-on-the-fly)
+- Clients for endpoints
+    - [.NET Client for endpoints](#net-client-for-endpoints)
+    - [.NET Azure Client for endpoints](#net-azure-client-for-endpoints)
+    - [.NET AWS Client for endpoints](#net-aws-client-for-endpoints)
+
 ## Plugging in the framework
 
 You may keep your `settings in your application's appsettings.json`.
@@ -107,6 +122,8 @@ app.MapPutReplaceOnTheFlySettings()
 
 Thats it!
 
+[Table of Contents](#table-of-contents)
+
 ## Plugging in the Azure framework
 
 You may keep your `settings as secrets in the Azure Key Vault`. 
@@ -188,6 +205,8 @@ app.MapAzurePutReplaceOnTheFlySettings()
 ```
 
 Thats it!
+
+[Table of Contents](#table-of-contents)
 
 ## Plugging in the AWS framework
 
@@ -280,6 +299,8 @@ app.MapAWSPutReplaceOnTheFlySettings()
 
 Thats it!
 
+[Table of Contents](#table-of-contents)
+
 ### Map
 
 If you want to have different names for your settings than the property names in your class, 
@@ -301,6 +322,8 @@ static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSetti
 }
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Usage in your API/App
 
 ### Accessing Current Settings
@@ -320,6 +343,8 @@ public MyService(
     _basicSettings = settings.Value;
 }
 ```
+
+[Table of Contents](#table-of-contents)
 
 #### Using IOnTheFlySettings\<TSettings\>
 
@@ -382,7 +407,9 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 
 Use `Globals.BasicSettings` in your code.
 
-## Events
+[Table of Contents](#table-of-contents)
+
+### Events
 
 The interface has an event `OnSettingsChanged`.
 
@@ -420,6 +447,8 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
     // Handle the settings change event here
 };
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Endpoints - read/update settings on-the-fly
 
@@ -491,7 +520,11 @@ These endpoints are meant to automate fetching and updating settings from Azure 
 
 ![Sample Screenshot](Images/PutSettings_Azure_AWS.png)
 
-## .NET Client for endpoints
+[Table of Contents](#table-of-contents)
+
+## Clients for endpoints
+
+### .NET Client for endpoints
 
 A .NET Client library is provided for interacting with the endpoints.
 
@@ -499,7 +532,7 @@ Read [more](/OnTheFlySettings.Client).
 
 [Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsClientTests.cs)
 
-## .NET Azure Client for endpoints
+### .NET Azure Client for endpoints
 
 A .NET Azure Client library is provided for interacting with the endpoints.
 
@@ -507,10 +540,12 @@ Read [more](/OnTheFlySettings.AzureKeyVault.Client).
 
 [Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsAzureClientTests.cs)
 
-## .NET AWS Client for endpoints
+### .NET AWS Client for endpoints
 
 A .NET AWS Client library is provided for interacting with the endpoints.
 
 Read [more](/OnTheFlySettings.AWSSecretManager.Client).
 
 [Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsAWSClientTests.cs)
+
+[Table of Contents](#table-of-contents)

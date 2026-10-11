@@ -23,6 +23,17 @@ There are .NET clients provided to get your secrets and update the settings in y
 
 It supports `various settings sources`.
 
+## Table of Contents
+
+- [Plugging in the framework](#plugging-in-the-framework)
+- [Plugging in the Azure framework](#plugging-in-the-azure-framework)
+- [Usage in your API/App](#usage-in-your-apiapp)
+    - [Accessing Current Settings](#accessing-current-settings)
+        - [Using IOptionsSnapshot\<T\>](#using-ioptionssnapshott)
+        - [Using IOnTheFlySettings\<TSettings\>](#using-iontheflysettingstsettings)
+    - [Events](#events)
+- [Endpoints - read/update settings on-the-fly](#endpoints---readupdate-settings-on-the-fly)
+
 ## Plugging in the framework
 
 You may keep your `settings in your application's appsettings.json`.
@@ -108,6 +119,8 @@ app.MapPutReplaceOnTheFlySettings()
 
 Thats it!
 
+[Table of Contents](#table-of-contents)
+
 ## Plugging in the Azure framework
 
 You may keep your `settings as secrets in the Azure Key Vault`.
@@ -189,6 +202,8 @@ app.MapAzurePutReplaceOnTheFlySettings()
 ```
 
 Thats it!
+
+[Table of Contents](#table-of-contents)
 
 ## Plugging in the AWS framework
 
@@ -280,6 +295,8 @@ app.MapAWSPutReplaceOnTheFlySettings()
 
 Thats it!
 
+[Table of Contents](#table-of-contents)
+
 ### Map
 
 If you want to have different names for your settings than the property names in your class, 
@@ -301,6 +318,8 @@ static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSetti
 }
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Usage in your API/App
 
 ### Accessing Current Settings
@@ -320,6 +339,8 @@ public MyService(
     _basicSettings = settings.Value;
 }
 ```
+
+[Table of Contents](#table-of-contents)
 
 #### Using IOnTheFlySettings\<TSettings\>
 
@@ -382,7 +403,9 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 
 Use `Globals.BasicSettings` in your code.
 
-## Events
+[Table of Contents](#table-of-contents)
+
+### Events
 
 The interface has an event `OnSettingsChanged`.
 
@@ -420,6 +443,8 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
     // Handle the settings change event here
 };
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Endpoints - read/update settings on-the-fly
 
@@ -490,3 +515,5 @@ When using the Azure/AWS PUT endpoint, all setting values must be strings.
 These endpoints are meant to automate fetching and updating settings from Azure Key Vault/AWS Secret Manager which store string values.
 
 ![Sample Screenshot](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/PutSettings_Azure_AWS.png)
+
+[Table of Contents](#table-of-contents)
