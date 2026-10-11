@@ -33,7 +33,7 @@ It supports `various settings sources`.
         - [Using IOnTheFlySettings\<TSettings\>](#using-iontheflysettingstsettings)
     - [Events](#events)
 - [Endpoints - read/update settings on-the-fly](#endpoints---readupdate-settings-on-the-fly)
-- Clients for endpoints
+- [Clients for endpoints](#clients-for-endpoints)
     - [.NET Client for endpoints](#net-client-for-endpoints)
     - [.NET Azure Client for endpoints](#net-azure-client-for-endpoints)
     - [.NET AWS Client for endpoints](#net-aws-client-for-endpoints)
@@ -523,6 +523,8 @@ These endpoints are meant to automate fetching and updating settings from Azure 
 [Table of Contents](#table-of-contents)
 
 ## Clients for endpoints
+
+Clients are provided for interacting with the endpoints.
 
 ### .NET Client for endpoints
 
