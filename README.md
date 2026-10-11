@@ -117,11 +117,11 @@ Add the endpoints to your application:
 ```csharp
 app.MapGetOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.   
 
 app.MapPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.   
 ```
 
 Thats it!
