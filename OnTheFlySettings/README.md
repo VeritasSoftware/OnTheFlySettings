@@ -303,54 +303,35 @@ static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSetti
 
 ## Usage in your API/App
 
+### Using IOptionsSnapshot<T>
+
+The library supports AspNetCore's `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
+
+#### Accessing Current Settings
+
+```csharp
+private readonly MyHealthCheckBasicSettings _basicSettings;
+
+// Constructor
+public MyService(
+                    IOptionsSnapshot<MyHealthCheckBasicSettings> settings
+                )
+{            
+    _basicSettings = settings.Value;
+}
+```
+
+### Using IOnTheFlySettings<TSettings>
+
 The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
 
 ![IOnTheFlySettings](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/IOnTheFlySettings.png)
 
-### Events
-
-The interface has an event `OnSettingsChanged`.
-
-You can subscribe to the event in your own class, for example in a service class.
-
-Just inject the `IOnTheFlySettings<TSettings>` interface into your class and subscribe to the event:
-
-```csharp
-private readonly IOnTheFlySettings<MyHealthCheckBasicSettings> _settingsHolder;
-
-// Constructor
-public MyService(
-                    IOnTheFlySettings<MyHealthCheckBasicSettings> settingsHolder
-                )
-{            
-    _settingsHolder = settingsHolder;
-    _settingsHolder.OnSettingsChanged += SettingsHolder_OnSettingsChanged;
-}
-
-private async Task SettingsHolder_OnSettingsChanged(MyHealthCheckBasicSettings? oldSettings, MyHealthCheckBasicSettings newSettings)
-{
-    // Handle the settings change event here
-}
-```
-
-or
-
-you can also subscribe to the event in your `Startup.cs` or `Program.cs` file:
-
-```csharp
-var settingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
-
-settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
-{
-    // Handle the settings change event here
-};
-```
-
-### Accessing Current Settings
+#### Accessing Current Settings
 
 The interface has `Current` & `Old` properties to access the current & previous settings.
 
-#### Using dependency injection
+##### Using dependency injection
 
 You can also use the interface to access the current settings at any time:
 
@@ -374,7 +355,7 @@ public MyService(
 }
 ```
 
-#### Using global variable
+##### Using global variable
 
 Create a static Globals class in your application.
 
@@ -402,22 +383,6 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 ```
 
 Use `Globals.BasicSettings` in your code.
-
-### IOptionsSnapshot
-
-The library supports `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
-
-```csharp
-private readonly MyHealthCheckBasicSettings _basicSettings;
-
-// Constructor
-public MyService(
-                    IOptionsSnapshot<MyHealthCheckBasicSettings> settings
-                )
-{            
-    _basicSettings = settings.Value;
-}
-```
 
 ## Endpoints - read/update settings on-the-fly
 

@@ -303,11 +303,88 @@ static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSetti
 
 ## Usage in your API/App
 
+### Using IOptionsSnapshot<T>
+
+The library supports AspNetCore's `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
+
+#### Accessing Current Settings
+
+```csharp
+private readonly MyHealthCheckBasicSettings _basicSettings;
+
+// Constructor
+public MyService(
+                    IOptionsSnapshot<MyHealthCheckBasicSettings> settings
+                )
+{            
+    _basicSettings = settings.Value;
+}
+```
+
+### Using IOnTheFlySettings<TSettings>
+
 The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
 
 ![IOnTheFlySettings](Images/IOnTheFlySettings.png)
 
-### Events
+#### Accessing Current Settings
+
+The interface has `Current` & `Old` properties to access the current & previous settings.
+
+##### Using dependency injection
+
+You can also use the interface to access the current settings at any time:
+
+```csharp
+var basicSettings = _serviceProvider.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>().Current;
+```
+
+or
+
+via constructor injection in your class:
+
+```csharp
+private readonly MyHealthCheckBasicSettings _basicSettings;
+
+// Constructor
+public MyService(
+                    IOnTheFlySettings<MyHealthCheckBasicSettings> settingsHolder
+                )
+{            
+    _basicSettings = settingsHolder.Current;
+}
+```
+
+##### Using global variable
+
+Create a static Globals class in your application.
+
+```csharp
+public static class Globals
+{
+    public static MyHealthCheckBasicSettings? BasicSettings { get; set; }
+}
+```
+
+Then, subscribe to `OnSettingsChanged` event in your `Program.cs` or `Startup.cs`.
+
+Update the Globals property in the event handler.
+
+```csharp
+var settingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
+
+settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
+{
+    lock(_lockObj)
+    {
+        Globals.BasicSettings = newSettings;
+    }
+};
+```
+
+Use `Globals.BasicSettings` in your code.
+
+## Events
 
 The interface has an event `OnSettingsChanged`.
 
@@ -344,79 +421,6 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 {
     // Handle the settings change event here
 };
-```
-
-### Accessing Current Settings
-
-The interface has `Current` & `Old` properties to access the current & previous settings.
-
-#### Using dependency injection
-
-You can also use the interface to access the current settings at any time:
-
-```csharp
-var basicSettings = _serviceProvider.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>().Current;
-```
-
-or
-
-via constructor injection in your class:
-
-```csharp
-private readonly MyHealthCheckBasicSettings _basicSettings;
-
-// Constructor
-public MyService(
-                    IOnTheFlySettings<MyHealthCheckBasicSettings> settingsHolder
-                )
-{            
-    _basicSettings = settingsHolder.Current;
-}
-```
-
-#### Using global variable
-
-Create a static Globals class in your application.
-
-```csharp
-public static class Globals
-{
-    public static MyHealthCheckBasicSettings? BasicSettings { get; set; }
-}
-```
-
-Then, subscribe to `OnSettingsChanged` event in your `Program.cs` or `Startup.cs`.
-
-Update the Globals property in the event handler.
-
-```csharp
-var settingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
-
-settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
-{
-    lock(_lockObj)
-    {
-        Globals.BasicSettings = newSettings;
-    }
-};
-```
-
-Use `Globals.BasicSettings` in your code.
-
-### IOptionsSnapshot
-
-The library supports `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
-
-```csharp
-private readonly MyHealthCheckBasicSettings _basicSettings;
-
-// Constructor
-public MyService(
-                    IOptionsSnapshot<MyHealthCheckBasicSettings> settings
-                )
-{            
-    _basicSettings = settings.Value;
-}
 ```
 
 ## Endpoints - read/update settings on-the-fly
