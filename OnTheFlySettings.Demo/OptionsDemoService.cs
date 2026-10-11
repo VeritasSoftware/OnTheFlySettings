@@ -4,22 +4,21 @@ namespace OnTheFlySettings.Demo
 {
     public class OptionsDemoService : IOptionsDemoService
     {
-        private readonly IOptionsSnapshot<MyHealthCheckBasicSettings> _settings;
+        private readonly MyHealthCheckBasicSettings _settings;
 
         public OptionsDemoService(IOptionsSnapshot<MyHealthCheckBasicSettings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public void PrintCurrentSettings()
         {
-            var currentSettings = _settings.Value;
             Console.WriteLine("Current Settings:");
-            Console.WriteLine($"HealthCheckIntervalInMinutes: {currentSettings.HealthCheckIntervalInMinutes}");
-            Console.WriteLine($"HealthCheckIntervalCronExpression: {currentSettings.HealthCheckIntervalCronExpression}");
-            Console.WriteLine($"HealthCheckServerHubUrl: {currentSettings.HealthCheckServerHubUrl}");
-            Console.WriteLine($"PublishOnlyWhenNotHealthy: {currentSettings.PublishOnlyWhenNotHealthy}");
-            Console.WriteLine($"AddHealthCheckMiddleware: {currentSettings.AddHealthCheckMiddleware}");
+            Console.WriteLine($"HealthCheckIntervalInMinutes: {_settings.HealthCheckIntervalInMinutes}");
+            Console.WriteLine($"HealthCheckIntervalCronExpression: {_settings.HealthCheckIntervalCronExpression}");
+            Console.WriteLine($"HealthCheckServerHubUrl: {_settings.HealthCheckServerHubUrl}");
+            Console.WriteLine($"PublishOnlyWhenNotHealthy: {_settings.PublishOnlyWhenNotHealthy}");
+            Console.WriteLine($"AddHealthCheckMiddleware: {_settings.AddHealthCheckMiddleware}");
         }
     }
 }
