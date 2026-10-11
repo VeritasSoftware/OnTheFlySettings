@@ -395,6 +395,22 @@ settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
 
 Use `Globals.BasicSettings` in your code.
 
+### IOptionsSnapshot
+
+The library supports `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
+
+```csharp
+private readonly MyHealthCheckBasicSettings _basicSettings;
+
+// Constructor
+public MyService(
+                    IOptionsSnapshot<MyHealthCheckBasicSettings> settings
+                )
+{            
+    _basicSettings = settings.Value;
+}
+```
+
 ## Endpoints - read/update settings on-the-fly
 
 Library provides Minimal API endpoints for managing settings, including reading, and updating settings.

@@ -11,4 +11,5 @@
   <Folder Name="/tests/">
     <Project Path="OnTheFlySettings.Tests/OnTheFlySettings.Tests.csproj" Id="9dccd3a3-8308-4d0c-93ef-7517bf2e490e" />
   </Folder>
+  <Project Path="OnTheFlySettings.Demo/OnTheFlySettings.Demo.csproj" Id="a8ec85c0-5366-41bc-85bf-fa2dfea422d6" />
 </Solution>

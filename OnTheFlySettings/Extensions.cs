@@ -37,6 +37,18 @@
                 return onTheFlySettings;
             });
 
+            services.AddOptions<TSettings>()
+            .Configure((TSettings options, IOnTheFlySettings<TSettings> onTheFly) =>
+            {
+                var currentSettings = onTheFlySettings.Current;
+                foreach (var property in typeof(TSettings).GetProperties())
+                {
+                    var value = property.GetValue(currentSettings);
+                    property.SetValue(options, value);
+                }
+            })
+            .ValidateOnStart();
+
             return services;
         }
 
