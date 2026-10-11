@@ -179,6 +179,10 @@ app.MapGetOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
                             // or remove this line to allow anonymous access.
 
+app.MapPutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+							// or remove this line to allow anonymous access.
+
 app.MapAzurePutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
                             // or remove this line to allow anonymous access.
@@ -264,6 +268,10 @@ Add the endpoints to your application:
 app.MapGetOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
                             // or remove this line to allow anonymous access.
+
+app.MapPutReplaceOnTheFlySettings()
+   .RequireAuthorization(); // Provide your own authorization policy here
+							// or remove this line to allow anonymous access.
 
 app.MapAWSPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
@@ -474,3 +482,9 @@ app.MapAWSPutReplaceOnTheFlySettings("/my-custom-route/aws/replace")
 ### Replace settings
 
 ![Sample Screenshot](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/PutSettings.png)
+
+When using the Azure/AWS PUT endpoint all setting values must be strings.
+
+These endpoints are meant to automate fetching a updating settings from Azure Key Vault/AWS Secret Manager which store string values.
+
+![Sample Screenshot](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/PutSettings_Azure_AWS.png)
