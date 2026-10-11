@@ -1,4 +1,7 @@
-﻿namespace OnTheFlySettings
+﻿using System.Diagnostics;
+using System.Reflection;
+
+namespace OnTheFlySettings
 {
     public static class Extensions
     {
@@ -38,14 +41,39 @@
             });
 
             services.AddOptions<TSettings>()
-            .Configure((TSettings options, IOnTheFlySettings<TSettings> onTheFly) =>
+            .Configure(options =>
             {
                 var currentSettings = onTheFlySettings.Current;
+
+                var props = ReflectionOptimizer.GetPropertiesCached(typeof(TSettings));
+
+                Stopwatch watch = Stopwatch.StartNew();
+                watch.Start();
+
                 foreach (var property in typeof(TSettings).GetProperties())
                 {
                     var value = property.GetValue(currentSettings);
                     property.SetValue(options, value);
+                }                
+
+                watch.Stop();
+
+                Console.WriteLine($"Time taken to copy properties: {watch.ElapsedMilliseconds} ms");
+
+                watch = Stopwatch.StartNew();
+                watch.Start();
+
+                foreach (var property in props)
+                {
+                    var getter = ReflectionOptimizer.GetFastGetter(property);
+                    var setter = ReflectionOptimizer.GetFastSetter(property);
+                    setter(options, getter(currentSettings)); // Get the value from currentSettings
+                    //var value = property.GetValue(currentSettings);
+                    //property.SetValue(options, value);
                 }
+
+                watch.Stop();
+                Console.WriteLine($"Time taken to copy properties (fallback): {watch.ElapsedMilliseconds} ms");
             })
             .ValidateOnStart();
 
