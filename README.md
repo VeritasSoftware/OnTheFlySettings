@@ -303,7 +303,7 @@ static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSetti
 
 ## Usage in your API/App
 
-### Using IOptionsSnapshot<T>
+### Using IOptionsSnapshot\<T\>
 
 The library supports AspNetCore's `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
 
@@ -321,7 +321,7 @@ public MyService(
 }
 ```
 
-### Using IOnTheFlySettings<TSettings>
+### Using IOnTheFlySettings\<TSettings\>
 
 The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
 
