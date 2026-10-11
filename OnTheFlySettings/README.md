@@ -198,7 +198,8 @@ app.MapGetOnTheFlySettings()
 
 app.MapPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
+							
 
 app.MapAzurePutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
@@ -290,7 +291,7 @@ app.MapGetOnTheFlySettings()
 
 app.MapPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
-							// or remove this line to allow anonymous access.
+                            // or remove this line to allow anonymous access.
 
 app.MapAWSPutReplaceOnTheFlySettings()
    .RequireAuthorization(); // Provide your own authorization policy here
