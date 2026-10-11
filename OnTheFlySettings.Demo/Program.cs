@@ -92,6 +92,20 @@ builder.Services.AddScoped<IOptionsDemoService, OptionsDemoService>();
 
 var app = builder.Build();
 
+var settingsHolder = app.Services.GetRequiredService<IOnTheFlySettings<MyHealthCheckBasicSettings>>();
+
+settingsHolder.OnSettingsChanged += async (oldSettings, newSettings) =>
+{
+    var options = new JsonSerializerOptions
+    {
+        WriteIndented = true
+    };
+    Console.WriteLine("Settings changed!");
+    Console.WriteLine($"Old Settings: {JsonSerializer.Serialize(oldSettings, options)}");
+    Console.WriteLine($"New Settings: {JsonSerializer.Serialize(newSettings, options)}");
+    await Task.CompletedTask;
+};
+
 app.MapGetOnTheFlySettings();
 app.MapPutReplaceOnTheFlySettings();
 //app.MapAzurePutReplaceOnTheFlySettings();
