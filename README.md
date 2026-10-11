@@ -303,11 +303,11 @@ static void Map (IDictionary<string, string> dictionary, MyHealthCheckBasicSetti
 
 ## Usage in your API/App
 
-### Using IOptionsSnapshot\<T\>
+### Accessing Current Settings
+
+#### Using IOptionsSnapshot\<T\>
 
 The library supports AspNetCore's `IOptionsSnapshot<T>` for accessing the current settings in your API/App.
-
-#### Accessing Current Settings
 
 ```csharp
 private readonly MyHealthCheckBasicSettings _basicSettings;
@@ -321,13 +321,11 @@ public MyService(
 }
 ```
 
-### Using IOnTheFlySettings\<TSettings\>
+#### Using IOnTheFlySettings\<TSettings\>
 
 The library provides a `IOnTheFlySettings<TSettings>` interface that you use in your API/App.
 
 ![IOnTheFlySettings](Images/IOnTheFlySettings.png)
-
-#### Accessing Current Settings
 
 The interface has `Current` & `Old` properties to access the current & previous settings.
 
