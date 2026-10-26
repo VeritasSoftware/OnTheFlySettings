@@ -33,17 +33,13 @@ builder.Services.AddOnTheFlySettingsFunctionsClient(settings =>
     settings.BaseUrl = "https://localhost:7277";
     settings.TimeoutMilliseconds = 1000 * 60 * 5;
 
-    var tenantId = Environment.GetEnvironmentVariable("AZURE_TENANT_ID");
-    var clientId = Environment.GetEnvironmentVariable("AZURE_CLIENT_ID");
-    var clientSecret = Environment.GetEnvironmentVariable("AZURE_CLIENT_SECRET");
-
-    settings.Azure.KeyVaultUrl = "https://ontheflysettings.vault.azure.net/";
+    settings.Azure.KeyVaultUrl = "<<your-key-vault-url>>";
 
     //settings.Azure.UseManagedIdentity = true;
     // OR                
-    settings.Azure.Credentials.TenantId = tenantId;
-    settings.Azure.Credentials.ClientId = clientId;
-    settings.Azure.Credentials.ClientSecret = clientSecret;
+    settings.Azure.Credentials.TenantId = "<<your-tenant-id>>";
+    settings.Azure.Credentials.ClientId = "<<your-client-id>>";
+    settings.Azure.Credentials.ClientSecret = "<<your-client-secret>>";
 });
 
 builder.Build().Run();
