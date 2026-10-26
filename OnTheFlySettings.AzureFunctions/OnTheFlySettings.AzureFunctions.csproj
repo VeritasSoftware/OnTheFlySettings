@@ -5,6 +5,21 @@
     <OutputType>Library</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+	  <IsPackable>true</IsPackable>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <Authors>Shantanu</Authors>
+	  <Company>Veritas Software</Company>
+	  <Description>Azure Function Client for OnTheFlySettings endpoints. Fully automate the update of the target API/App setting when the underlying secret in Azure Key Vault is updated.</Description>
+	  <PackageProjectUrl>https://github.com/VeritasSoftware/OnTheFlySettings</PackageProjectUrl>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <RepositoryUrl>https://github.com/VeritasSoftware/OnTheFlySettings</RepositoryUrl>
+	  <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+	  <PackageTags>asp net core azure key vault secrets client azure function event grid on the fly settings dynamic without restarting API application runtime</PackageTags>
+	  <Version>1.0.0</Version>
+	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	  <FileVersion>1.0.0.0</FileVersion>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

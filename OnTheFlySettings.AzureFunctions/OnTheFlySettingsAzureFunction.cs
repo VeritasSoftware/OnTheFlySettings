@@ -66,8 +66,7 @@ namespace OnTheFlySettings.AzureFunctions
                     _logger?.LogError("One or more required properties are missing in the event data.");
                     return;
                 }
-                // TODO: Add your business logic here
-                // Example: Fetch the new secret value from Key Vault
+
                 await ProcessNewSecretVersionAsync(vaultName, objectName, version);
             }
             catch (Exception ex)
@@ -78,8 +77,6 @@ namespace OnTheFlySettings.AzureFunctions
 
         private async Task ProcessNewSecretVersionAsync(string vaultName, string secretName, string version)
         {
-            // This is where you'd call Key Vault to retrieve the secret value
-            // For security, avoid logging sensitive values
             _logger?.LogInformation("Processing new secret version for {SecretName} in vault {VaultName}", secretName, vaultName);
 
             var secretResponse = await _secretClient.GetSecretAsync(secretName, version);
@@ -103,8 +100,6 @@ namespace OnTheFlySettings.AzureFunctions
             {
                 _logger?.LogWarning("Setting replacement failed.");
             }
-
-            await Task.CompletedTask;
         }
     }
 }

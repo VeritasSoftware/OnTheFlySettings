@@ -48,7 +48,7 @@ builder.Build().Run();
 
 Deploy the Azure Function to Azure.
 
-## Step 2: Create an Event Grid Topic
+## Step 2: Create an `Event Grid Topic`
 
 Create an `Event Grid Topic` in your Azure subscription and resource group.
 
