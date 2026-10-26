@@ -8,10 +8,11 @@
 |*OnTheFlySettings.Client*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.Client)](https://www.nuget.org/packages/OnTheFlySettings.Client)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.Client)](https://www.nuget.org/packages/OnTheFlySettings.Client)|
 |*OnTheFlySettings.AzureKeyVault.Client*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.AzureKeyVault.Client)](https://www.nuget.org/packages/OnTheFlySettings.AzureKeyVault.Client)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.AzureKeyVault.Client)](https://www.nuget.org/packages/OnTheFlySettings.AzureKeyVault.Client)|
 |*OnTheFlySettings.AWSSecretManager.Client*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.AWSSecretManager.Client)](https://www.nuget.org/packages/OnTheFlySettings.AWSSecretManager.Client)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.AWSSecretManager.Client)](https://www.nuget.org/packages/OnTheFlySettings.AWSSecretManager.Client)|
+|*OnTheFlySettings.AzureFunctions*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.AzureFunctions)](https://www.nuget.org/packages/OnTheFlySettings.AzureFunctions)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.AzureFunctions)](https://www.nuget.org/packages/OnTheFlySettings.AzureFunctions)|
 
 ![On The Fly Settings](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/OnTheFlySettings.jpg)
 
-The .NET Client library allows you to fully automate the update of the target API/App setting when the underlying secret in Azure Key Vault is updated.
+The .NET Azure Functions Client library allows you to fully automate the update of the target API/App setting when the underlying secret in Azure Key Vault is updated.
 
 ## Step 1: Add the library to your Azure Functions App project.
 
@@ -47,9 +48,15 @@ builder.Build().Run();
 
 Deploy the Azure Function to Azure.
 
-## Step 2: Create an `Event Subscription` in your Azure Key Vault 
+## Step 2: Create an Event Grid Topic
 
-Create an `Event Subscription` in your Azure Key Vault and point it to the Azure Function endpoint.
+Create an `Event Grid Topic` in your Azure subscription and resource group.
+
+![Azure Event Grid Topic](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/AzureKeyVault_EventGridTopic.png)
+
+## Step 3: Create an `Event Subscription` in your Azure Key Vault 
+
+Create an `Event Subscription` in your Azure Key Vault and point it to the deployed Azure Function endpoint.
 
 This subscription then calls the OnTheFlySettings Azure Function endpoint when the secret is updated.
 
@@ -57,7 +64,7 @@ This subscription then calls the OnTheFlySettings Azure Function endpoint when t
 
 That's it! Now your Azure Function is ready to receive the event from Azure Key Vault when the secret is updated.
 
-## Step 3: Update underlying secret in Azure Key Vault
+## Usage: Update underlying secret in Azure Key Vault
 
 Let us say you update the secret `HealthCheckIntervalCronExpression` (for eg.) in Azure Key Vault and create a new version.
 
