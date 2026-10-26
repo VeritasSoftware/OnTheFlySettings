@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "OnTheFlySettings.AzureFunctions.Demo": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7245",
+      "launchBrowser": false
+    }
+  }
+}
