@@ -41,6 +41,7 @@ It supports `various settings sources`.
     - [.NET Client for endpoints](#net-client-for-endpoints)
     - [.NET Azure Client for endpoints](#net-azure-client-for-endpoints)
     - [.NET AWS Client for endpoints](#net-aws-client-for-endpoints)
+    - [Azure Functions Client for endpoints](#azure-functions-client-for-endpoints)
 
 ## Plugging in the framework
 
@@ -553,5 +554,13 @@ A .NET AWS Client library is provided for interacting with the endpoints.
 Read [more](/OnTheFlySettings.AWSSecretManager.Client).
 
 [Client tests](/OnTheFlySettings.Tests/OnTheFlySettingsAWSClientTests.cs)
+
+[Table of Contents](#table-of-contents)
+
+### Azure Functions Client for endpoints
+
+A .NET Azure Functions Client library is provided for updating the target API/App settings when the underlying secret in Azure Key Vault is updated.
+
+Read [more](/OnTheFlySettings.AzureFunctions).
 
 [Table of Contents](#table-of-contents)
