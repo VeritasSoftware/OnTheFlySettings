@@ -30,7 +30,7 @@ builder.Services.AddOnTheFlySettingsFunctionsClient(settings =>
 {
     // Url of target API/App whose settings you want to update 
     // when the underlying secret in Azure Key Vault is updated.
-    settings.BaseUrl = "https://localhost:7277";
+    settings.BaseUrl = "<<url-of-target-api-app>>";
     settings.TimeoutMilliseconds = 1000 * 60 * 5;
 
     settings.Azure.KeyVaultUrl = "<<your-key-vault-url>>";
