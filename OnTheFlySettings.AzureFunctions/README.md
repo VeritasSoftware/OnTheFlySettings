@@ -67,7 +67,9 @@ Let us say you update the secret `HealthCheckIntervalCronExpression` (for eg.) i
 
 This will trigger the Azure Function which will fetch the secret value from the Key Vault 
 
-and call the target API/App endpoint to update the settings.
+and call the target API/App endpoint to update the setting.
+
+Complete automation of the setting update is achieved without any manual intervention.
 
 ![Azure Secret Update](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/AzureKeyVaultSecrets_Update.png)
 
