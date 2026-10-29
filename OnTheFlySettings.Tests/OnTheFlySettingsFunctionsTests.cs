@@ -13,6 +13,8 @@ namespace OnTheFlySettings.Tests
         public async Task OnTheFlySettingsAzureFunction_Run_Pass()
         {
             // Arrange
+            var eventType = "Microsoft.KeyVault.SecretNewVersionCreated";
+
             var secretName = "HealthCheckIntervalCronExpression";
             var secretVersion = Guid.NewGuid().ToString();
 
@@ -42,10 +44,7 @@ namespace OnTheFlySettings.Tests
             };
             var binaryData = BinaryData.FromObjectAsJson(payload);
 
-            var evt = new EventGridEvent(secretName,
-                                            "Microsoft.KeyVault.SecretNewVersionCreated",
-                                            "1.0",
-                                            binaryData);
+            var evt = new EventGridEvent(secretName, eventType, "1.0", binaryData);
 
             // Act
             await function.Run(evt);
@@ -60,6 +59,8 @@ namespace OnTheFlySettings.Tests
         public async Task OnTheFlySettingsAzureFunction_Run_InvalidEventType_Fail()
         {
             // Arrange
+            var eventType = "Microsoft.KeyVault.SecretNearExpiry";
+
             var secretName = "HealthCheckIntervalCronExpression";
             var secretVersion = Guid.NewGuid().ToString();
 
@@ -89,10 +90,7 @@ namespace OnTheFlySettings.Tests
             };
             var binaryData = BinaryData.FromObjectAsJson(payload);
 
-            var evt = new EventGridEvent(secretName,
-                                            "Microsoft.KeyVault.SecretNearExpiry",
-                                            "1.0",
-                                            binaryData);
+            var evt = new EventGridEvent(secretName, eventType, "1.0", binaryData);
 
             // Act
             await function.Run(evt);
