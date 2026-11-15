@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<OutputType>Library</OutputType>
@@ -10,19 +10,19 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>Shantanu</Authors>
 		<Company>Veritas Software</Company>
-		<Description>Update your API/App config settings on-the-fly, at runtime, without needing a restart! Zero downtime! Supports .NET 6/7/8/9/10.</Description>
+		<Description>Update your API/App config settings on-the-fly, at runtime, without needing a restart! Zero downtime! Supports .NET 8/9/10/11.</Description>
 		<PackageProjectUrl>https://github.com/VeritasSoftware/OnTheFlySettings</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/VeritasSoftware/OnTheFlySettings</RepositoryUrl>
 		<PackageReleaseNotes>
 			Changelog
-			- Support for aspnetcore's IOptionsSnapshot&lt;T&gt;.
-			- Mapping between setting names and property names.
+			- Support for .NET 11. Now supports .NET 8/9/10/11.
+			- Support dropped for .NET 6/7. Please use version 3.x.x for .NET 6/7 support.
 		</PackageReleaseNotes>
 		<PackageTags>asp net core aws secrets manager azure key vault on the fly settings dynamic without restarting API application runtime no downtime</PackageTags>
-		<Version>3.1.0</Version>
-		<AssemblyVersion>3.1.0.0</AssemblyVersion>
-		<FileVersion>3.1.0.0</FileVersion>
+		<Version>4.0.0</Version>
+		<AssemblyVersion>4.0.0.0</AssemblyVersion>
+		<FileVersion>4.0.0.0</FileVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 

@@ -10,7 +10,7 @@
 |*OnTheFlySettings.AWSSecretManager.Client*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.AWSSecretManager.Client)](https://www.nuget.org/packages/OnTheFlySettings.AWSSecretManager.Client)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.AWSSecretManager.Client)](https://www.nuget.org/packages/OnTheFlySettings.AWSSecretManager.Client)|
 |*OnTheFlySettings.AzureFunctions*|[![Nuget Version](https://img.shields.io/nuget/v/OnTheFlySettings.AzureFunctions)](https://www.nuget.org/packages/OnTheFlySettings.AzureFunctions)|[![Downloads count](https://img.shields.io/nuget/dt/OnTheFlySettings.AzureFunctions)](https://www.nuget.org/packages/OnTheFlySettings.AzureFunctions)|
 
-### Supports .NET 6/7/8/9/10.
+### Supports .NET 8/9/10/11.
 
 ![On The Fly Settings](https://raw.githubusercontent.com/VeritasSoftware/OnTheFlySettings/master/Images/OnTheFlySettings.jpg)
 
