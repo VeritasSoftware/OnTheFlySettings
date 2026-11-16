@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.EventGrid" Version="3.4.2" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.14" />    
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />    
@@ -22,6 +23,7 @@
     <ProjectReference Include="..\OnTheFlySettings.AzureFunctions\OnTheFlySettings.AzureFunctions.csproj" />
     <ProjectReference Include="..\OnTheFlySettings.AzureKeyVault.Client\OnTheFlySettings.AzureKeyVault.Client.csproj" />
     <ProjectReference Include="..\OnTheFlySettings.Client\OnTheFlySettings.Client.csproj" />
+    <ProjectReference Include="..\OnTheFlySettings.Demo\OnTheFlySettings.Demo.csproj" />
     <ProjectReference Include="..\OnTheFlySettings\OnTheFlySettings.csproj" />
   </ItemGroup>
 

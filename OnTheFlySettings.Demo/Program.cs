@@ -128,3 +128,8 @@ app.MapGet("/print-options-settings", (IOptionsDemoService optionsDemoService) =
 });
 
 await app.RunAsync();
+
+namespace OnTheFlySettings.Demo
+{
+    public partial class Program { }
+}
