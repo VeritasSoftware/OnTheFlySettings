@@ -12,7 +12,7 @@ namespace OnTheFlySettings.Tests
         }
 
         [Fact]
-        public async Task ReplaceSettingsAsync()
+        public async Task UpdateSettings_AtRuntime_ZeroDowntime()
         {
             // Get the current settings
             var response = await _client.GetFromJsonAsync<MyHealthCheckBasicSettings>("/settings");
